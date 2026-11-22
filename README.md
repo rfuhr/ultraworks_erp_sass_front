@@ -21,8 +21,14 @@ pnpm install
 pnpm start
 ```
 
-A aplicação fica disponível em `http://localhost:4200` e exibe a rota inicial
-de exemplo com os estados de loading, empty, error e success.
+A aplicação fica disponível em `http://localhost:4200` e abre a home autenticada
+do shell de demonstração. A rota inicial redireciona para o login quando não há
+sessão.
+
+Credenciais de demonstração (dados mockados, sessão em memória):
+
+- E-mail: `demo@frontend.dev`
+- Senha: `demo1234`
 
 ## Scripts
 
@@ -84,6 +90,76 @@ docker run --rm -p 8080:80 frontend-template
 ```
 
 O container serve a SPA com fallback para `index.html` e headers de segurança.
+
+## Base para novos projetos
+
+O desenvolvimento continua neste repositório, na `master`. Para iniciar um projeto novo a partir
+da fundação **congelada**, use o repositório-template:
+
+- **Template:** [`rfuhr/ultraworks_erp_saas_front_base`](https://github.com/rfuhr/ultraworks_erp_saas_front_base) (privado)
+- No GitHub: **Use this template → Create a new repository**. O projeto nasce com um commit único,
+  sem histórico e sem vínculo de fork com este repositório.
+- Tags de snapshot: `v0.1-base`, `v0.2-base`, ... — a mais recente é a base vigente
+  (`git tag -l "v*-base" --sort=-v:refname`).
+
+O snapshot **não acompanha** a `master`: mudanças futuras aqui não entram nos projetos criados a
+partir dele.
+
+### Atualizar o snapshot
+
+A promoção de uma nova visão é feita **a partir deste repositório de trabalho**. O clone já tem os
+dois remotes:
+
+| Remote | Repositório | Papel |
+|---|---|---|
+| `origin` | `rfuhr/ultraworks_erp_sass_front` | desenvolvimento |
+| `base` | `rfuhr/ultraworks_erp_saas_front_base` | snapshot/template |
+
+```powershell
+# 1. busque o estado mais recente do desenvolvimento
+git fetch origin
+
+# 2. mova o snapshot para o commit atual de origin/master
+git push base origin/master:master
+
+# 3. marque o novo marco
+git tag -a v0.2-base -m "Snapshot v0.2 da fundacao frontend"
+git push origin v0.2-base
+git push base v0.2-base
+
+# 4. confirme que os dois lados apontam para o mesmo commit
+git rev-parse origin/master
+git ls-remote base refs/heads/master
+```
+
+Alternativa trabalhando na `master` local:
+
+```powershell
+git checkout master
+git pull origin master
+git push base master
+```
+
+Projetos **já criados** a partir do snapshot não mudam; apenas os criados **depois** do push nascem
+com o novo estado. A tag anterior (`v0.1-base`) continua apontando para o commit antigo.
+
+Se a `master` foi reescrita (rebase/amend/force), o push é rejeitado e o snapshot precisa ser
+sobrescrito explicitamente:
+
+```powershell
+git fetch base
+git push --force-with-lease base master
+```
+
+Rollback de uma promoção por engano:
+
+```powershell
+git rev-parse v0.1-base   # SHA de destino (ou a tag que quiser restaurar)
+git push --force-with-lease base <SHA>:master
+```
+
+> Projetos já gerados com o estado novo não são afetados pelo rollback.
+> Nunca faça o caminho inverso (`base` → `origin`): o snapshot é somente destino.
 
 ## Próximos passos
 
