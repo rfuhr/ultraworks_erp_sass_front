@@ -6,6 +6,16 @@
 
 <!-- Describe what will change. Be specific about new capabilities, modifications, or removals. -->
 
+## Escopo
+
+<!-- Declare onde a mudança vive no monorepo. Obrigatório: apps afetados e libs tocadas.
+     Apps: erp, platform-admin. Libs: tokens, uw-ui, core, data, i18n.
+     Se a mudança criar uma lib nova, justifique e cite o ADR. -->
+
+- **Apps:** `<erp | platform-admin>`
+- **Libs:** `<tokens | uw-ui | core | data | i18n>`
+- **Capabilities:** `<kebab-case>` (prefixar com o app quando o comportamento for específico de produto)
+
 ## Capabilities
 
 ### New Capabilities

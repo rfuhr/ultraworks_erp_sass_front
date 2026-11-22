@@ -7,7 +7,7 @@
 > **Backend:** projeto Java em `back/` (API `/api/v1`).
 >
 > **Nome de trabalho:** ERP SaaS
-> **Repositório:** frontend-only (sem monorepo, sem backend)
+> **Repositório:** monorepo frontend-only — `apps/erp` (tenant) + `apps/platform-admin` (plataforma), sem backend
 
 ---
 
@@ -31,6 +31,7 @@ O design system, a estrutura de login/shell e a biblioteca de componentes são *
 | Camada | Tecnologia |
 |---|---|
 | Framework | **Angular 21+** (standalone components) |
+| Workspace | **Angular CLI multi-project** — 2 apps + libs source-mapped (`@erp/*`) |
 | Linguagem | **TypeScript 5.9+**, `strict: true`, zero `any` |
 | Estado | **Signals** + services (sem NgRx) |
 | Estilo | **Tailwind CSS 4** + design tokens |
@@ -40,8 +41,8 @@ O design system, a estrutura de login/shell e a biblioteca de componentes são *
 | Gráficos | **`@swimlane/ngx-charts`** |
 | Formulários | Reactive Forms + validators; Signal Forms quando estável |
 | HTTP | `HttpClient` + interceptors + repositories |
-| Testes | **Jest + `jest-preset-angular` + Playwright** |
-| Documentação | **Storybook** |
+| Testes | **Jest + `jest-preset-angular` + Playwright**, por projeto |
+| Documentação | **Storybook** (projeto único em `libs/uw-ui`) |
 | Lint/format | **ESLint + Prettier** |
 | Build | Angular CLI + Docker/nginx |
 
@@ -52,41 +53,40 @@ O design system, a estrutura de login/shell e a biblioteca de componentes são *
 ## 3. Estrutura do Projeto
 
 ```text
-src/
-├── app/
-│   ├── config/                 # Providers, i18n, environment
-│   ├── core/
-│   │   ├── guards/             # auth, tenant, role/permission
-│   │   ├── interceptors/       # auth, tenant, error, no-cache
-│   │   ├── models/             # modelos globais
-│   │   ├── repositories/       # HTTP base/global
-│   │   └── services/           # auth, session, menu, notification, context
-│   ├── data/
-│   │   ├── models/             # contratos por feature
-│   │   └── repositories/       # HTTP por feature
-│   ├── features/
-│   │   ├── auth/login/
-│   │   ├── home/
-│   │   └── <modulo>/<feature>/ # pages, components, services
-│   ├── layout/                 # root layout, shell
-│   └── shared/
-│       ├── components/         # componentes compartilhados não-uw-ui
-│       ├── pipes/
-│       └── uw-ui/              # biblioteca própria (uw-*)
-├── assets/
-├── environments/
-└── styles/
-    ├── tokens/                 # palette, colors, typography, borders
-    └── theme.css
+apps/
+├── erp/                          # ERP operacional (tenant) — erp.<dominio>
+│   ├── src/app/
+│   │   ├── app.config.ts         # providers do produto
+│   │   ├── app.routes.ts         # rotas do produto
+│   │   ├── features/             # telas do produto
+│   │   └── layout/               # shell e menu do produto
+│   ├── src/environments/
+│   ├── src/styles.css            # Tailwind + @source das libs
+│   └── e2e/
+└── platform-admin/               # gestão de clientes SaaS — admin.<dominio>
+    └── (mesma estrutura do erp)
+
+libs/
+├── tokens/                       # tokens CSS (palette → semânticos)
+├── uw-ui/                        # componentes uw-* + Storybook único
+│   ├── src/lib/<componente>/
+│   └── .storybook/
+├── core/                         # auth, sessão, contexto, HTTP, erros, guards
+├── data/                         # models + repositories por domínio
+└── i18n/                         # catálogo base pt-BR/en/es
 ```
 
 Regras:
 
-- **Feature-first** em `features/`.
-- `core/` contém singletons e infraestrutura de app.
-- `data/` contém contratos e repositórios HTTP.
-- `shared/uw-ui/` contém apenas componentes reutilizáveis e genéricos.
+- **Feature-first** em `apps/<app>/src/app/features/`.
+- `libs/core` contém a infraestrutura compartilhada de app (auth, sessão, contexto tenant/empresa/filial, interceptors, guards, erros).
+- `libs/data` contém contratos e repositórios HTTP por domínio.
+- `libs/uw-ui` contém apenas componentes genéricos e reutilizáveis: **não conhece domínio, auth ou HTTP**.
 - Nada de regra de negócio em componente presentational.
+- Shell, menu e rotas vivem no app, nunca em lib.
+- Imports cruzados usam os aliases `@erp/*`; proibido caminho relativo atravessando `apps/` ou `libs/`.
+- **Regra dos 3 consumidores:** código só sobe para `libs/` quando há dois consumidores reais (ou ADR justificando).
+- **App não importa app.** Direção permitida: `tokens ← uw-ui`, `tokens ← core ← data ← apps/*`, `i18n ← apps/*`.
 
 ---
 
@@ -108,15 +108,15 @@ Fonte da verdade: [`docs/design-system.md`](../docs/design-system.md) e tokens e
 
 ### 5.1 Login
 
-- Tenant + e-mail + senha.
-- Tenant pode vir do subdomínio (`acme.app.exemplo.com`) ou de um campo no login.
+- Tenant + e-mail + senha no app `erp`; a equipe da plataforma usa e-mail + senha sem tenant no app `platform-admin`.
+- Na fase 1 o tenant do ERP vem de um **campo no login** (o app roda em `erp.<dominio>`). Subdomínio por tenant (`<tenant>.erp.<dominio>`) é evolução futura (ADR-0011).
 - Mensagens de erro genéricas para credenciais inválidas.
 - Rate limit/lockout tratados com UX clara.
 
 ### 5.2 Sessão
 
-- **Access token em memória** (signal/serviço).
-- **Refresh token em cookie HttpOnly/Secure/SameSite** (contrato alvo).
+- **Access token em memória** (signal/serviço), por app.
+- **Refresh token em cookie HttpOnly/Secure/SameSite** com `Domain=.<dominio>` (ADR-0011).
 - Renovação automática em 401, com fila para evitar múltiplos refreshes.
 - Logout limpa sessão, contexto e cache.
 - Nunca armazenar refresh token em `localStorage`.
@@ -160,6 +160,7 @@ Fonte da verdade: [`docs/design-system.md`](../docs/design-system.md) e tokens e
 ## 7. Rotas e Shell
 
 ```text
+erp.<dominio>                    # apps/erp
 /auth/login
 /auth/forgot-password
 /auth/reset-password
@@ -171,10 +172,26 @@ Fonte da verdade: [`docs/design-system.md`](../docs/design-system.md) e tokens e
 /403
 /404
 /error
+
+admin.<dominio>                  # apps/platform-admin
+/platform/login
+/platform/tenants
+/platform/tenants/:id
+/platform/plans
+/platform/usage
+/platform/audit
+/platform/settings
+/403
+/404
+/error
 ```
 
-- `/app` usa o **shell autenticado** (`uw-admin-layout`): sidebar, header, breadcrumb, conteúdo.
+- `/app` usa o **shell do ERP** (`uw-admin-layout` + menu de módulos de ERP).
+- `/platform` usa o **shell do Platform Admin** (mesmas primitivas de layout, menu e breadcrumb próprios).
 - Rotas lazy-loaded.
+- Menus derivados de permissões/features do backend, não hardcoded por usuário.
+- Cada app tem sua própria página de 403/404/erro (destino de retorno é diferente).
+- Guards: `authGuard`/`tenantGuard` no ERP; `authGuard` + `platformRoleGuard` no Platform Admin.
 - Menu derivado de permissões/features do backend, não hardcoded por usuário.
 - Breadcrumb por rota.
 - Home: stat cards, gráficos, atividades recentes, atalhos.
@@ -205,9 +222,10 @@ Fonte da verdade: [`docs/design-system.md`](../docs/design-system.md) e tokens e
 ## 9. Testes e Qualidade
 
 - **Unitários:** Jest + `jest-preset-angular` para services, repositories, guards, pipes.
+- **Projetos:** cada app e cada lib tem seu projeto de teste (`pnpm test:erp`, `pnpm test:platform`, `pnpm test:libs`).
 - **Componentes:** Jest + TestBed (Angular Testing Library quando disponível).
-- **E2E:** Playwright para login, shell, CRUD e fluxos críticos.
-- **Visual:** Storybook para `uw-ui`.
+- **E2E:** Playwright por app — `apps/erp/e2e` (porta 4200) e `apps/platform-admin/e2e` (porta 4201).
+- **Visual:** Storybook único em `libs/uw-ui`.
 - **Cobertura:** 80% em `core/` e `data/`, 70% em `features/`, 100% em `shared/` pipes/directives.
 - **Qualidade:** ESLint, Prettier, `tsc --noEmit`, zero `any`, zero `console.log`.
 - **Performance:** lazy routes, OnPush, signals, `NgOptimizedImage`, budgets.
@@ -229,7 +247,7 @@ Fonte da verdade: [`docs/design-system.md`](../docs/design-system.md) e tokens e
 ## 11. Fora de Escopo (por enquanto)
 
 - Backend.
-- Monorepo.
+- Um terceiro app no monorepo sem ADR e change própria.
 - Microfrontends.
 - Aplicativo mobile nativo.
 - Billing/checkout.
@@ -242,8 +260,8 @@ Fonte da verdade: [`docs/design-system.md`](../docs/design-system.md) e tokens e
 
 Uma change só está pronta quando:
 
-- [ ] `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` passam.
-- [ ] Testes unitários, de componente e E2E do fluxo.
+- [ ] `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` passam **por projeto afetado** (erp, platform-admin, libs).
+- [ ] Testes unitários, de componente e E2E do fluxo no app afetado.
 - [ ] Acessibilidade revisada (teclado, foco, aria, contraste).
 - [ ] Responsivo nos breakpoints definidos.
 - [ ] i18n aplicado (sem string hardcoded).

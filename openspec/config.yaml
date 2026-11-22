@@ -4,7 +4,16 @@ context: |
   Language: Portuguese (pt-BR)
   All artifacts must be written in Brazilian Portuguese.
 
-  Frontend-only project. No monorepo. No backend.
+  Frontend-only monorepo. No backend.
+
+  Workspace:
+    - Angular CLI multi-project (no Nx)
+    - apps/erp — tenant-facing ERP (erp.<domain>)
+    - apps/platform-admin — SaaS tenant management (admin.<domain>)
+    - libs/tokens, libs/uw-ui, libs/core, libs/data, libs/i18n
+    - Source-mapped libs with @erp/* aliases
+    - One component library (uw-ui) shared by both apps; never fork a component per app
+    - Storybook is a single project at libs/uw-ui
 
   Stack:
     - Angular 21+ with standalone components and signals
@@ -21,13 +30,21 @@ context: |
     - Docker + nginx
 
   Architecture:
-    - Feature-first structure: config, core, data, features, layout, shared/uw-ui
+    - Feature-first inside each app: apps/<app>/src/app/{features,layout}
+    - libs/core: auth, session, tenant/company/branch context, interceptors, guards, errors
+    - libs/data: models and HTTP repositories per domain
+    - libs/uw-ui: generic components only; must not know domain, auth or HTTP
+    - Dependency direction: tokens <- uw-ui; tokens <- core <- data <- apps/*; i18n <- apps/*
+    - An app must never import another app
+    - Shell, menu and routes live in the app, never in a lib
+    - Rule of three consumers before promoting code to libs/
     - Standalone components, no feature NgModules
     - Signals for local state; RxJS only for async streams
     - Container vs presentational; OnPush on presentational
     - Repository + stateful service with signals
     - Lazy-loaded routes
     - No third-party UI libraries
+    - Tailwind 4 per app, with @source pointing to libs so lib classes are generated
 
   Design system:
     - Source of truth: docs/design-system.md and docs/design-tokens/
@@ -59,6 +76,10 @@ rules:
   proposal:
     - Must use grill-me skill
     - Include a "Non-goals" section
+    - Declare "Escopo" with affected apps (erp, platform-admin) and libs (tokens, uw-ui, core, data, i18n)
+    - A change touching both apps must have per-app specs, not one shared spec
+    - Prefix capability names with the app when behavior is product-specific (erp-*, platform-*)
+    - Justify any new lib and reference the ADR that approved it
     - Identify affected screens, routes and components
     - Reference the backend endpoints used (if any)
     - Reference the design system and existing uw-ui components
@@ -66,6 +87,7 @@ rules:
 
   specs:
     - Must use gherkin-authoring skill
+    - Never reuse a capability name across apps; shared behavior belongs to a lib-level capability (auth-session, http-errors, i18n)
     - Every requirement must have at least one scenario
     - Use GIVEN/WHEN/THEN in every scenario
     - Include loading, empty, error and success states
@@ -76,7 +98,8 @@ rules:
 
   design:
     - Must use c4-diagrams skill
-    - Must reference a prototype in docs/design/prototypes/<screen>/
+    - Must reference a prototype in docs/design/prototypes/<app>/<screen>/
+    - Must confirm dependency direction (no app -> app, no uw-ui -> core/data)
     - Map visual elements to docs/design-system.md
     - List uw-ui components used (no third-party UI)
     - Include sequence diagram for cross-layer flows
@@ -91,7 +114,9 @@ rules:
 
   tasks:
     - Break into tasks of at most 2 hours
+    - Group tasks by app/lib when the change spans both
     - Order frontend tasks: types -> repository -> service -> component -> tests -> e2e
+    - Include a lint/typecheck/test/build run per affected project
     - Include unit tests for services, repositories and guards
     - Include component tests for containers
     - Include Playwright E2E for critical flows
