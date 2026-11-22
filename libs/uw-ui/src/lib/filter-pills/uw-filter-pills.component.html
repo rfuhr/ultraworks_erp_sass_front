@@ -1,0 +1,28 @@
+<div [class]="containerClass()" role="tablist">
+  @for (item of items(); track item.value) {
+    <button
+      type="button"
+      role="tab"
+      [class.uw-filter-pills__pill--active]="isActive(item)"
+      [class.uw-filter-pills__pill--inactive]="!isActive(item)"
+      [attr.aria-selected]="isActive(item)"
+      class="uw-filter-pills__pill"
+      (click)="select(item)"
+      (keydown.enter)="select(item)"
+      (keydown.space)="select(item); $event.preventDefault()"
+    >
+      @if (item.icon) {
+        <uw-icon [name]="item.icon" size="sm" class="uw-filter-pills__icon" />
+      }
+      <span class="uw-filter-pills__label">{{ item.label }}</span>
+      @if (item.badge !== undefined) {
+        <span
+          class="uw-filter-pills__badge"
+          [class.uw-filter-pills__badge--active]="isActive(item)"
+        >
+          {{ item.badge }}
+        </span>
+      }
+    </button>
+  }
+</div>

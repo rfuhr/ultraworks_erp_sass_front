@@ -1,0 +1,41 @@
+@if (overlay()) {
+  <div class="spinner-overlay">
+    <div class="spinner-container">
+      @if (mode() === 'determinate') {
+        <svg class="spinner-svg" [style.width.px]="diameter()" [style.height.px]="diameter()" viewBox="0 0 36 36">
+          <circle class="spinner-track" cx="18" cy="18" r="16" fill="none" [style.stroke-width]="borderWidth()" />
+          <circle class="spinner-fill" cx="18" cy="18" r="16" fill="none" [style.stroke-width]="borderWidth()"
+            [style.stroke-dasharray]="circumference()" [style.stroke-dashoffset]="offset()" [style.stroke]="strokeColor()" />
+        </svg>
+      } @else {
+        <div class="spinner-indeterminate" [style.width.px]="diameter()" [style.height.px]="diameter()"
+          [style.border-width.px]="borderWidth()" [style.border-top-color]="strokeColor()"></div>
+      }
+      @if (mode() === 'determinate') {
+        <span class="spinner-value" [style.font-size]="labelSize()">{{ value() }}%</span>
+      }
+      @if (label()) {
+        <span class="spinner-label">{{ label() }}</span>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="spinner-container">
+    @if (mode() === 'determinate') {
+      <svg class="spinner-svg" [style.width.px]="diameter()" [style.height.px]="diameter()" viewBox="0 0 36 36">
+        <circle class="spinner-track" cx="18" cy="18" r="16" fill="none" [style.stroke-width]="borderWidth()" />
+        <circle class="spinner-fill" cx="18" cy="18" r="16" fill="none" [style.stroke-width]="borderWidth()"
+          [style.stroke-dasharray]="circumference()" [style.stroke-dashoffset]="offset()" [style.stroke]="strokeColor()" />
+      </svg>
+    } @else {
+      <div class="spinner-indeterminate" [style.width.px]="diameter()" [style.height.px]="diameter()"
+        [style.border-width.px]="borderWidth()" [style.border-top-color]="strokeColor()"></div>
+    }
+    @if (mode() === 'determinate') {
+      <span class="spinner-value" [style.font-size]="labelSize()">{{ value() }}%</span>
+    }
+    @if (label()) {
+      <span class="spinner-label">{{ label() }}</span>
+    }
+  </div>
+}

@@ -1,0 +1,71 @@
+<main class="uw-home" aria-labelledby="home-title">
+  <header class="uw-home__header">
+    <div class="uw-home__topbar">
+      <p class="uw-home__eyebrow">{{ 'home.badge' | translate }}</p>
+      <uw-language-switcher
+        [initialLang]="i18n.currentLanguage()"
+        (languageChange)="changeLanguage($event)"
+      />
+    </div>
+    <h1 id="home-title" class="uw-home__title">{{ 'home.title' | translate }}</h1>
+    <p class="uw-home__subtitle">{{ 'home.subtitle' | translate }}</p>
+  </header>
+
+  <section class="uw-home__actions" aria-label="Simulação de estados">
+    <button type="button" class="uw-home__button" (click)="load('success')">
+      {{ 'home.actions.load' | translate }}
+    </button>
+    <button type="button" class="uw-home__button uw-home__button--ghost" (click)="load('empty')">
+      {{ 'home.actions.empty' | translate }}
+    </button>
+    <button type="button" class="uw-home__button uw-home__button--ghost" (click)="load('error')">
+      {{ 'home.actions.error' | translate }}
+    </button>
+  </section>
+
+  <section class="uw-home__panel" aria-live="polite">
+    @switch (state()) {
+      @case ('loading') {
+        <div class="uw-home__status" role="status">
+          <span class="uw-home__spinner" aria-hidden="true"></span>
+          {{ 'home.loading' | translate }}
+        </div>
+      }
+
+      @case ('empty') {
+        <div class="uw-home__status uw-home__status--empty">
+          <h2>{{ 'home.empty.title' | translate }}</h2>
+          <p>{{ 'home.empty.description' | translate }}</p>
+          <button type="button" class="uw-home__button" (click)="load('success')">
+            {{ 'home.empty.action' | translate }}
+          </button>
+        </div>
+      }
+
+      @case ('error') {
+        <div class="uw-home__status uw-home__status--error" role="alert">
+          <h2>{{ 'home.error.title' | translate }}</h2>
+          <p>{{ 'home.error.description' | translate }}</p>
+          <button type="button" class="uw-home__button" (click)="load('success')">
+            {{ 'home.error.retry' | translate }}
+          </button>
+        </div>
+      }
+
+      @case ('success') {
+        <ul class="uw-home__list">
+          @for (item of items(); track item.id) {
+            <li class="uw-home__item">
+              <h2>{{ item.titleKey | translate }}</h2>
+              <p>{{ item.descriptionKey | translate }}</p>
+            </li>
+          }
+        </ul>
+      }
+    }
+  </section>
+
+  <footer class="uw-home__footer">
+    <a routerLink="/404">{{ 'home.footer.notFound' | translate }}</a>
+  </footer>
+</main>

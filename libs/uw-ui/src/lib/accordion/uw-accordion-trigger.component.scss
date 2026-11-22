@@ -1,0 +1,61 @@
+.uw-accordion-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-on-surface);
+  text-align: left;
+  transition: background-color 150ms;
+  gap: 0.75rem;
+
+  &:hover {
+    background-color: var(--color-surface-tint);
+  }
+
+  &--expanded {
+    font-weight: 700;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 8%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex: 1;
+  }
+
+  &__custom-icon {
+    font-size: 1.125rem;
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  &__chevron {
+    font-size: 1.25rem;
+    color: var(--color-outline);
+    flex-shrink: 0;
+    transition: transform 200ms;
+    user-select: none;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+}

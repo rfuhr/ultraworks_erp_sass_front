@@ -1,0 +1,23 @@
+<label class="radio-option-container" [class.radio-option-disabled]="disabled()">
+  <div
+    class="radio-circle"
+    [class.radio-selected]="checked()"
+    (click)="select()"
+  >
+    @if (checked()) {
+      <div class="radio-dot"></div>
+    }
+  </div>
+  @if (label()) {
+    <span class="radio-label">{{ label() }}</span>
+  }
+  <input
+    type="radio"
+    class="radio-native"
+    [name]="optionName()"
+    [checked]="checked()"
+    [disabled]="disabled()"
+    [value]="value()"
+    tabindex="-1"
+  />
+</label>

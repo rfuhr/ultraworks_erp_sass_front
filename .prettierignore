@@ -1,0 +1,10 @@
+node_modules
+dist
+coverage
+.angular
+storybook-static
+playwright-report
+test-results
+out-tsc
+pnpm-lock.yaml
+openspec/changes/archive

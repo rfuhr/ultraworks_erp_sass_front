@@ -1,0 +1,37 @@
+<div class="uw-export-menu">
+  <uw-button
+    variant="primary"
+    icon="table_view"
+    [label]="loading() ? '' : label()"
+    [disabled]="disabled() || loading()"
+    (clicked)="toggle()"
+  />
+  @if (loading()) {
+    <span class="uw-export-menu__loading" role="status" aria-live="polite">
+      <uw-icon name="progress_activity" size="sm" />
+    </span>
+  }
+
+  @if (aberto()) {
+    <div class="uw-export-menu__panel" role="menu" aria-label="Formatos de exportação">
+      @if (mostra('xlsx')) {
+        <button type="button" class="uw-export-menu__item" role="menuitem" (click)="selecionar('xlsx')">
+          <uw-icon name="table_view" size="sm" />
+          <span>{{ xlsxLabel() }}</span>
+        </button>
+      }
+      @if (mostra('csv')) {
+        <button type="button" class="uw-export-menu__item" role="menuitem" (click)="selecionar('csv')">
+          <uw-icon name="description" size="sm" />
+          <span>{{ csvLabel() }}</span>
+        </button>
+      }
+      @if (mostra('pdf')) {
+        <button type="button" class="uw-export-menu__item" role="menuitem" (click)="selecionar('pdf')">
+          <uw-icon name="picture_as_pdf" size="sm" />
+          <span>{{ pdfLabel() }}</span>
+        </button>
+      }
+    </div>
+  }
+</div>

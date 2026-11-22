@@ -1,0 +1,16 @@
+<uw-card variant="outlined" class="uw-chart-card">
+  <div class="uw-chart-card__head">
+    <div class="uw-chart-card__heading">
+      <h2 class="uw-chart-card__title">{{ title() }}</h2>
+      @if (subtitle()) {
+        <p class="uw-chart-card__subtitle">{{ subtitle() }}</p>
+      }
+    </div>
+    @if (badge()) {
+      <span class="uw-chart-card__badge">{{ badge() }}</span>
+    }
+  </div>
+  <div class="uw-chart-card__body">
+    <ng-content />
+  </div>
+</uw-card>

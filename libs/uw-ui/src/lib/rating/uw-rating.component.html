@@ -1,0 +1,30 @@
+<div class="rating-container" role="radiogroup" [attr.aria-label]="'Avaliação de ' + max() + ' estrelas'">
+  @for (star of stars(); track $index) {
+    <span
+      class="rating-star"
+      [class.rating-star-filled]="$index < Math.floor(innerValue())"
+      [class.rating-star-half]="half() && $index === Math.floor(innerValue()) && innerValue() % 1 !== 0"
+      [class.rating-star-readonly]="readonly()"
+      [class.rating-star-disabled]="disabled()"
+      [style.font-size]="starSize()"
+      (click)="onStarClick($event, $index)"
+      role="radio"
+      [attr.aria-checked]="$index < Math.floor(innerValue())"
+      [attr.aria-label]="'Estrela ' + ($index + 1)"
+      tabindex="0"
+    >
+      <span class="material-symbols-outlined" [style.font-size]="starSize()">
+        @if (half() && $index === Math.floor(innerValue()) && innerValue() % 1 !== 0) {
+          star_half
+        } @else if ($index < Math.round(innerValue())) {
+          star
+        } @else {
+          star_outline
+        }
+      </span>
+    </span>
+  }
+  @if (showLabel()) {
+    <span class="rating-value">{{ innerValue() }}/{{ max() }}</span>
+  }
+</div>

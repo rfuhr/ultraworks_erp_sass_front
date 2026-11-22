@@ -1,0 +1,60 @@
+<div class="uw-confirm" [class]="cfg.containerClass">
+  <div class="uw-confirm__body">
+    <div class="uw-confirm__icon-wrapper">
+      <span class="material-symbols-outlined uw-confirm__icon">{{ cfg.icon }}</span>
+    </div>
+    <h3 class="uw-confirm__title">{{ data.title }}</h3>
+    <p class="uw-confirm__message">
+      <span [innerHTML]="data.message"></span>
+      @if (data.messageBold) {
+        <br/>
+        <strong>{{ data.messageBold }}</strong>
+      }
+    </p>
+    @if (input(); as inputOptions) {
+      <div class="uw-confirm__field">
+        @if (inputOptions.label) {
+          <label class="uw-confirm__label" for="uw-confirm-input">
+            {{ inputOptions.label }}
+            @if (inputOptions.required) {
+              <span class="uw-confirm__required">*</span>
+            }
+          </label>
+        }
+        <textarea
+          id="uw-confirm-input"
+          class="uw-confirm__input"
+          [class.uw-confirm__input--invalid]="inputOptions.required && !value().trim()"
+          [placeholder]="inputOptions.placeholder ?? ''"
+          [attr.maxlength]="maxLength"
+          [value]="value()"
+          (input)="onInput($event)"
+          rows="3"
+        ></textarea>
+        @if (maxLength) {
+          <span class="uw-confirm__counter">{{ value().length }}/{{ maxLength }}</span>
+        }
+      </div>
+    }
+    <div class="uw-confirm__actions">
+      @if (data.showCancel !== false) {
+        <button class="uw-confirm__btn uw-confirm__btn--cancel" (click)="close(false)">
+          {{ data.cancelLabel ?? 'Cancelar' }}
+        </button>
+      }
+      <button
+        class="uw-confirm__btn uw-confirm__btn--confirm"
+        [disabled]="confirmDisabled()"
+        (click)="close(true)"
+      >
+        {{ data.confirmLabel ?? 'Confirmar' }}
+      </button>
+    </div>
+  </div>
+  @if (data.footerInfo) {
+    <div class="uw-confirm__footer">
+      <span class="material-symbols-outlined">info</span>
+      <span>{{ data.footerInfo }}</span>
+    </div>
+  }
+</div>

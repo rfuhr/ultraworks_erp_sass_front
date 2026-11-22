@@ -1,0 +1,9 @@
+<ul class="uw-chart-legend">
+  @for (item of items(); track item.label) {
+    <li class="uw-chart-legend__row">
+      <span class="uw-chart-legend__dot" [style.background]="item.color" aria-hidden="true"></span>
+      <span class="uw-chart-legend__label">{{ item.label }}</span>
+      <span class="uw-chart-legend__value">{{ item.value }}</span>
+    </li>
+  }
+</ul>

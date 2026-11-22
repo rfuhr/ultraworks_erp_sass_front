@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "types": ["jest", "node"],
+    "isolatedModules": true
+  },
+  "include": [
+    "setup-jest.ts",
+    "apps/**/*.spec.ts",
+    "apps/**/*.d.ts",
+    "libs/**/*.spec.ts",
+    "libs/**/*.d.ts"
+  ]
+}

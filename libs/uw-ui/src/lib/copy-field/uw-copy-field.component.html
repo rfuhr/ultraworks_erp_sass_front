@@ -1,0 +1,20 @@
+<div class="uw-copy-field">
+  @if (label()) {
+    <span class="uw-copy-field__label">{{ label() }}</span>
+  }
+  <div class="uw-copy-field__row">
+    <span class="uw-copy-field__value" [attr.aria-live]="'polite'">{{ displayValue() }}</span>
+    <button
+      class="uw-copy-field__btn"
+      type="button"
+      [attr.aria-label]="copied() ? 'Copiado' : 'Copiar'"
+      (click)="copiar()"
+    >
+      @if (copied()) {
+        <uw-icon name="check" size="xs" />
+      } @else {
+        <uw-icon name="content_copy" size="xs" />
+      }
+    </button>
+  </div>
+</div>

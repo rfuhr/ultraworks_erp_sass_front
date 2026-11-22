@@ -1,0 +1,90 @@
+<div class="uw-stepper">
+  <div class="uw-stepper__header" [attr.data-overflow]="overflowMode()">
+    @for (step of steps(); track step.id; let i = $index; let isLast = $last) {
+      <button
+        type="button"
+        class="uw-stepper__step"
+        [class.uw-stepper__step--active]="i === currentStep()"
+        [class.uw-stepper__step--completed]="isStepCompleted(i, step.id)"
+        [class.uw-stepper__step--disabled]="isStepDisabled(i)"
+        [disabled]="isStepDisabled(i)"
+        (click)="goToStep(i)"
+      >
+        <div class="uw-stepper__step-icon">
+          @if (showCompletedIcon() && isStepCompleted(i, step.id)) {
+            <uw-icon name="check" size="xs" [style.color]="'#ffffff'" />
+          } @else if (step.icon) {
+            <uw-icon [name]="step.icon" size="xs" [style.color]="i === currentStep() ? '#ffffff' : 'var(--color-on-surface-variant)'" />
+          } @else {
+            <span class="uw-stepper__step-number">{{ i + 1 }}</span>
+          }
+        </div>
+        @if (shouldShowLabel(i)) {
+          <span class="uw-stepper__step-label" [title]="step.label">{{ step.label }}</span>
+        }
+      </button>
+
+      @if (!isLast) {
+        <div
+          class="uw-stepper__connector"
+          [class.uw-stepper__connector--completed]="isStepCompleted(i, step.id)"
+        ></div>
+      }
+    }
+  </div>
+
+  @if (!hideContent()) {
+    <div class="uw-stepper__content">
+      @if (activeTemplate(); as tmpl) {
+        <ng-container [ngTemplateOutlet]="tmpl.templateRef" />
+      }
+    </div>
+  }
+
+  @if (!hideActions()) {
+    <div class="uw-stepper__actions">
+      <button
+        type="button"
+        class="uw-stepper__btn uw-stepper__btn--prev"
+        [disabled]="isFirstStep()"
+        (click)="goToPrevious()"
+      >
+        <uw-icon name="chevron_left" size="sm" />
+        Anterior
+      </button>
+
+      @if (showDots()) {
+        <div class="uw-stepper__dots">
+          @for (dot of progressDots(); track dot.index) {
+            <span
+              class="uw-stepper__dot"
+              [class.uw-stepper__dot--active]="dot.isActive"
+              [class.uw-stepper__dot--completed]="dot.isCompleted"
+            ></span>
+          }
+        </div>
+      }
+
+      @if (showSaveDraft()) {
+        <button
+          type="button"
+          class="uw-stepper__btn uw-stepper__btn--save"
+          (click)="saveDraft.emit()"
+        >
+          Salvar Rascunho
+        </button>
+      }
+
+      <button
+        type="button"
+        class="uw-stepper__btn uw-stepper__btn--next"
+        (click)="goToNext()"
+      >
+        {{ isLastStep() ? lastStepLabel() : 'Próximo' }}
+        @if (!isLastStep()) {
+          <uw-icon name="chevron_right" size="sm" />
+        }
+      </button>
+    </div>
+  }
+</div>

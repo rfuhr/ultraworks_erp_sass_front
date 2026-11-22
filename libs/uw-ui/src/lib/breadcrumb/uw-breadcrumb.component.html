@@ -1,0 +1,18 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb-list">
+    @for (item of displayItems(); track $index; let last = $last) {
+      <li class="breadcrumb-item">
+        @if (item.route && !last) {
+          <a class="breadcrumb-link" [routerLink]="item.route">{{ item.label }}</a>
+        } @else if (item.isCollapsed) {
+          <span class="breadcrumb-collapsed" (click)="showAll()">…</span>
+        } @else {
+          <span class="breadcrumb-active" aria-current="page">{{ item.label }}</span>
+        }
+        @if (!last && separator()) {
+          <span class="material-symbols-outlined breadcrumb-separator">{{ separator() }}</span>
+        }
+      </li>
+    }
+  </ol>
+</nav>

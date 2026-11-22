@@ -1,0 +1,23 @@
+<div class="uw-search">
+  <span class="uw-search__icon">
+    <span class="material-symbols-outlined">search</span>
+  </span>
+  <input
+    class="uw-search__input"
+    type="text"
+    [ngModel]="searchTerm()"
+    (ngModelChange)="onTermChange($event)"
+    (keyup.enter)="onSearch()"
+    (blur)="onSearch()"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+  />
+  @if (searchTerm()) {
+    <button class="uw-search__clear" (click)="onClear()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  }
+</div>
+@if (appliedFilter()) {
+  <p class="uw-search__filter-indicator">Filtro aplicado: {{ appliedFilter() }}</p>
+}

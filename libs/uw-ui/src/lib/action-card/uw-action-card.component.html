@@ -1,0 +1,30 @@
+<button
+  class="uw-action-card"
+  (click)="onClick()"
+  [disabled]="disabled()"
+  [style.background]="bg() || null"
+  [style.border-color]="borderColor()"
+  [style.cursor]="interactive() ? 'pointer' : 'default'"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-disabled]="!interactive() ? 'true' : null"
+>
+  @if (icon(); as iconName) {
+    <span class="uw-action-card__icon">
+      <uw-icon [name]="iconName" [size]="iconSize()" [style.color]="color()" />
+    </span>
+  }
+
+  <span class="uw-action-card__content">
+    <span class="uw-action-card__label">{{ label() }}</span>
+    <span class="uw-action-card__status" [style.color]="color()">{{ statusText() }}</span>
+  </span>
+
+  @if (interactive()) {
+    <uw-icon
+      class="uw-action-card__chevron"
+      name="chevron_right"
+      size="xs"
+      [style.color]="color()"
+    />
+  }
+</button>

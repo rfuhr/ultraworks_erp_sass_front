@@ -1,0 +1,17 @@
+uw-radio-group {
+  display: block;
+
+  .radio-group-container {
+    display: flex;
+  }
+
+  .radio-group-container.radio-group-vertical {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .radio-group-container.radio-group-horizontal {
+    flex-direction: row;
+    gap: 16px;
+  }
+}

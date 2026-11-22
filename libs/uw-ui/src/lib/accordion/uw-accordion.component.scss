@@ -1,0 +1,7 @@
+.uw-accordion {
+  display: block;
+  background: var(--color-surface-bright);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 10%, transparent);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}

@@ -1,0 +1,88 @@
+@if (open()) {
+  <div class="dov-overlay" (click)="close.emit()">
+    <div class="dov-container" (click)="$event.stopPropagation()">
+      <!-- Toolbar -->
+      <div class="dov-toolbar">
+        <div class="dov-toolbar-left">
+          <div class="dov-toolbar-icon-wrap">
+            <span class="material-symbols-outlined dov-toolbar-icon">description</span>
+          </div>
+          <div>
+            <p class="dov-toolbar-filename">{{ document().nome }}</p>
+            <p class="dov-toolbar-meta">{{ document().tipo }} · {{ document().tamanho }}</p>
+          </div>
+        </div>
+        <div class="dov-toolbar-actions">
+          @if (previewKind() !== 'pdf') {
+            <button (click)="zoomOut()" class="dov-toolbar-btn" type="button">
+              <span class="material-symbols-outlined">zoom_out</span>
+            </button>
+            <span class="dov-zoom-label">{{ zoom }}%</span>
+            <button (click)="zoomIn()" class="dov-toolbar-btn" type="button">
+              <span class="material-symbols-outlined">zoom_in</span>
+            </button>
+            <div class="dov-divider"></div>
+          }
+          <button (click)="download()" class="dov-toolbar-btn" type="button">
+            <span class="material-symbols-outlined">download</span>
+          </button>
+          <button (click)="close.emit()" class="dov-toolbar-btn" type="button">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="dov-body">
+        <!-- Preview area -->
+        <div
+          class="dov-preview-area"
+          [class.dov-preview-area--documento]="previewKind() !== 'outro'"
+        >
+          @switch (previewKind()) {
+            @case ('imagem') {
+              <div class="dov-preview-scroll">
+                <img
+                  class="dov-preview-image"
+                  [src]="document().url"
+                  [alt]="document().nome"
+                  [style.width.%]="zoom"
+                />
+              </div>
+            }
+            @case ('pdf') {
+              @if (pdfUrl(); as url) {
+                <iframe class="dov-preview-frame" [src]="url" [title]="document().nome"></iframe>
+              }
+            }
+            @default {
+              <div class="dov-preview-card" [style]="{ width: zoom * 5.6 + 'px' }">
+                <div
+                  class="dov-preview-icon"
+                  [ngClass]="{ 'dov-preview-icon--pdf': document().nome.endsWith('.pdf') }"
+                >
+                  <span class="material-symbols-outlined dov-preview-icon-symbol">description</span>
+                </div>
+                <div class="dov-preview-info">
+                  <p class="dov-preview-name">{{ document().nome }}</p>
+                  <p class="dov-preview-meta">{{ document().tipo }} · {{ document().tamanho }}</p>
+                  <p class="dov-preview-date">Enviado em {{ document().dataEnvio }}</p>
+                  <button (click)="download()" class="dov-preview-download" type="button">
+                    <span class="material-symbols-outlined">download</span>
+                    Baixar documento
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <!-- Side panel (optional, projected by parent) -->
+        @if (sidePanelContent()) {
+          <div class="uwSidepanel">
+            <ng-content select="[uwSidepanel]" />
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

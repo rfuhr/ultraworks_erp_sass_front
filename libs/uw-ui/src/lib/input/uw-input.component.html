@@ -1,0 +1,83 @@
+<div class="uw-input__wrapper">
+  <div class="uw-input__container">
+    @if (icon(); as iconName) {
+      <button type="button" class="uw-input__icon-btn" [disabled]="isDisabled()" (click)="onIconClick($event)">
+        <uw-icon [name]="iconName" size="sm" />
+      </button>
+    }
+
+    @if (prefix(); as prefixText) {
+      <span class="uw-input__prefix" [class.uw-input__prefix--right]="prefixAlign() === 'right'">{{ prefixText }}</span>
+    }
+
+    @if (maskPattern(); as mask) {
+      <input
+        #maskInput
+        [type]="numeric() && type() === 'number' ? 'text' : (type() === 'valor' || type() === 'decimal' ? 'text' : type())"
+        [placeholder]="!isDisabled() ? (effectivePlaceholder() || '') : ''"
+        [disabled]="isDisabled()"
+        [value]="value"
+        [attr.maxlength]="maxlength() ?? null"
+        [attr.inputmode]="inputmode()"
+        [mask]="mask"
+        [patterns]="type() === 'cnpj' ? cnpjPatterns : defaultPatterns"
+        [dropSpecialCharacters]="dropSpecialChars()"
+        (input)="onInput($event)"
+        (keydown)="onKeydown($event)"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+        class="uw-input__field"
+        [style.padding]="inputPadding()"
+        [style.background]="focused ? 'var(--color-surface-bright)' : 'var(--color-surface-tint)'"
+        [style.border]="'1.5px solid ' + borderColor"
+        [style.box-shadow]="focused ? '0 0 0 3px ' + shadowColor : 'none'"
+      />
+    } @else {
+      <input
+        [type]="numeric() && type() === 'number' ? 'text' : (type() === 'valor' || type() === 'decimal' ? 'text' : type())"
+        [placeholder]="!isDisabled() ? (effectivePlaceholder() || '') : ''"
+        [value]="value"
+        [disabled]="isDisabled()"
+        [attr.maxlength]="maxlength() ?? null"
+        [attr.inputmode]="inputmode()"
+        (input)="onInput($event)"
+        (keydown)="onKeydown($event)"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+        class="uw-input__field"
+        [style.padding]="inputPadding()"
+        [style.background]="focused ? 'var(--color-surface-bright)' : 'var(--color-surface-tint)'"
+        [style.border]="'1.5px solid ' + borderColor"
+        [style.box-shadow]="focused ? '0 0 0 3px ' + shadowColor : 'none'"
+      />
+    }
+
+    @if (suffixIcon(); as suffixName) {
+      <button
+        type="button"
+        class="uw-input__suffix-icon-btn"
+        [disabled]="isDisabled()"
+        [title]="suffixIconTitle()"
+        [attr.aria-label]="suffixIconTitle() || null"
+        (mousedown)="$event.preventDefault()"
+        (click)="onSuffixIconClick($event)"
+      >
+        <uw-icon [name]="suffixName" size="sm" />
+      </button>
+    }
+  </div>
+
+  <div class="uw-input__footer">
+    <div class="uw-input__messages">
+      @if (hint(); as hintText) {
+        <p class="uw-input__hint">{{ hintText }}</p>
+      }
+      @if (error(); as errorMsg) {
+        <p class="uw-input__error">{{ errorMsg }}</p>
+      }
+    </div>
+    @if (maxlength(); as max) {
+      <p class="uw-input__counter">{{ value.length }} / {{ max }}</p>
+    }
+  </div>
+</div>

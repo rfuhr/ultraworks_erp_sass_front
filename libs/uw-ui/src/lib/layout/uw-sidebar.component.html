@@ -1,0 +1,99 @@
+<aside class="uw-sidebar" [class.uw-sidebar--collapsed]="collapsed()" aria-label="Navegação principal">
+  <div class="uw-sidebar__brand">
+    <span class="uw-sidebar__mark" aria-hidden="true"></span>
+    @if (!collapsed()) {
+      <span class="uw-sidebar__title">{{ title() }}</span>
+    }
+    <button
+      type="button"
+      class="uw-sidebar__toggle"
+      [attr.aria-label]="collapsed() ? 'Expandir menu' : 'Recolher menu'"
+      [attr.aria-expanded]="!collapsed()"
+      (click)="toggle.emit()"
+    >
+      <uw-icon [name]="collapsed() ? 'chevron_right' : 'chevron_left'" size="sm" />
+    </button>
+  </div>
+
+  <nav class="uw-sidebar__nav">
+    <ul class="uw-sidebar__list">
+      @for (item of items(); track item.label) {
+        <li>
+          <button
+            type="button"
+            class="uw-sidebar__item"
+            [attr.aria-label]="collapsed() ? item.label : null"
+            (click)="navigate.emit(item.path ?? '')"
+          >
+            @if (item.icon) {
+              <uw-icon [name]="item.icon" size="sm" />
+            }
+            @if (!collapsed()) {
+              <span class="uw-sidebar__label">{{ item.label }}</span>
+            }
+            @if (!collapsed() && item.badge) {
+              <span class="uw-sidebar__badge">{{ item.badge }}</span>
+            }
+          </button>
+
+          @if (!collapsed() && item.children?.length) {
+            <ul class="uw-sidebar__sublist">
+              @for (child of item.children; track child.label) {
+                <li>
+                  <button
+                    type="button"
+                    class="uw-sidebar__item uw-sidebar__item--child"
+                    (click)="navigate.emit(child.path ?? '')"
+                  >
+                    <span class="uw-sidebar__label">{{ child.label }}</span>
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <div class="uw-sidebar__footer">
+    @if (bottomItems().length) {
+      <ul class="uw-sidebar__list">
+        @for (item of bottomItems(); track item.label) {
+          <li>
+            <button
+              type="button"
+              class="uw-sidebar__item"
+              [attr.aria-label]="collapsed() ? item.label : null"
+              (click)="navigate.emit(item.path ?? '')"
+            >
+              @if (item.icon) {
+                <uw-icon [name]="item.icon" size="sm" />
+              }
+              @if (!collapsed()) {
+                <span class="uw-sidebar__label">{{ item.label }}</span>
+              }
+            </button>
+          </li>
+        }
+      </ul>
+    }
+
+    @if (user(); as currentUser) {
+      <div class="uw-sidebar__user">
+        <span class="uw-sidebar__avatar" aria-hidden="true">{{ currentUser.initials ?? currentUser.name.slice(0, 2) }}</span>
+        @if (!collapsed()) {
+          <span class="uw-sidebar__user-info">
+            <strong>{{ currentUser.name }}</strong>
+            @if (currentUser.role) {
+              <small>{{ currentUser.role }}</small>
+            }
+          </span>
+          <button type="button" class="uw-sidebar__logout" aria-label="Sair" (click)="logout.emit()">
+            <uw-icon name="logout" size="sm" />
+          </button>
+        }
+      </div>
+    }
+  </div>
+</aside>

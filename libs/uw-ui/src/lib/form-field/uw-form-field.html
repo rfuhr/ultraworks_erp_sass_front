@@ -1,0 +1,13 @@
+<div class="uw-form-field">
+  <label class="uw-form-field__label">
+    {{ label() }}
+    @if (required()) {
+      <span class="uw-form-field__asterisk">*</span>
+    }
+    @if (hint(); as hintText) {
+      <uw-icon name="info" size="xs" [filled]="true" class="uw-form-field__info-icon" [title]="hintText" />
+    }
+  </label>
+
+  <ng-content />
+</div>

@@ -1,0 +1,19 @@
+<div [class]="containerClass()">
+  @for (tag of tags(); track $index) {
+    <uw-tag
+      [label]="tag"
+      [value]="tag"
+      variant="soft"
+      [removable]="!isDisabled()"
+      (removed)="removeTag($index)"
+    />
+  }
+  <input
+    class="uw-input-tag__input"
+    [placeholder]="tags().length === 0 ? placeholder() : ''"
+    [value]="inputValue()"
+    [disabled]="isDisabled()"
+    (input)="onInput($event)"
+    (keydown)="onInputKeydown($event)"
+  />
+</div>

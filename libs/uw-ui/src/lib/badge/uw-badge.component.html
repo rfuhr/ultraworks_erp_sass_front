@@ -1,0 +1,11 @@
+<span
+  class="inline-flex items-center justify-center rounded-full font-semibold select-none"
+  [style.font-family]="fontFamily"
+  [style.background]="bg()"
+  [style.color]="color()"
+  [style.border]="border()"
+  [style.font-size]="fontSize()"
+  [style.min-width]="dimension()"
+  [style.height]="dimension()"
+  [style.padding]="padding()"
+>{{ dot() ? '' : label() }}</span>

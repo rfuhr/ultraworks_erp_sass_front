@@ -1,0 +1,49 @@
+uw-otp-input {
+  display: block;
+}
+
+.otp-container {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.otp-field {
+  width: 48px;
+  height: 48px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  border: 1.5px solid #e5e8eb;
+  border-radius: 4px;
+  outline: none;
+  background: #fff;
+  color: #181c1e;
+  transition: border-color 150ms, box-shadow 150ms;
+}
+
+.otp-field:focus {
+  border-color: #0041c8;
+  box-shadow: 0 0 0 2px color-mix(in srgb, #0041c8 8%, transparent);
+}
+
+.otp-field.otp-field-filled {
+  border-color: #0041c8;
+}
+
+.otp-field.otp-field-error {
+  border-color: #ba1a1a;
+}
+
+.otp-field:disabled {
+  opacity: 0.5;
+  background: #ebeef1;
+  cursor: not-allowed;
+}
+
+.otp-error {
+  text-align: center;
+  font-size: 12px;
+  color: #ba1a1a;
+  margin-top: 4px;
+}

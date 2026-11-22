@@ -1,0 +1,22 @@
+uw-popover {
+  display: none;
+}
+
+.uw-popover-panel {
+  display: block;
+  background: var(--color-surface-bright);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06);
+  min-width: 200px;
+  overflow: hidden;
+  animation: uw-popover-in 120ms ease;
+
+  > div {
+    width: 100%;
+  }
+}
+
+@keyframes uw-popover-in {
+  from { opacity: 0; transform: translateY(4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}

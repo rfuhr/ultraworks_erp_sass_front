@@ -1,0 +1,15 @@
+<div class="empty-state" [class]="'empty-state-' + size()">
+  <span class="material-symbols-outlined empty-state-icon">{{ icon() }}</span>
+  <h3 class="empty-state-title">{{ title() }}</h3>
+  @if (description()) {
+    <p class="empty-state-description">{{ description() }}</p>
+  }
+  @if (actionLabel()) {
+    <button class="empty-state-action" (click)="action.emit()">
+      @if (actionIcon()) {
+        <span class="material-symbols-outlined">{{ actionIcon() }}</span>
+      }
+      {{ actionLabel() }}
+    </button>
+  }
+</div>

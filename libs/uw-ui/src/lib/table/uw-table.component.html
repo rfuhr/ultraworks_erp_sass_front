@@ -1,0 +1,127 @@
+<div class="uw-table" [class.uw-table--loading]="loading()" [class.uw-table--xs]="rowSize() === 'xs'" [class.uw-table--sm]="rowSize() === 'sm'" [class.uw-table--lg]="rowSize() === 'lg'">
+  <div class="uw-table__wrapper">
+    <table class="uw-table__table">
+      <thead>
+        <tr class="uw-table__header-row">
+          @if (selectionMode() !== 'none') {
+            <th class="uw-table__cell-checkbox">
+              @if (selectionMode() === 'multiple') {
+                <input type="checkbox"
+                  [checked]="isAllSelected()"
+                  (change)="toggleAll()" />
+              }
+            </th>
+          }
+          @for (col of visibleColumns(); track col.key) {
+            <th
+              class="uw-table__header-cell"
+              [class.uw-table__header-cell--sortable]="col.sortable"
+              [ngClass]="col.headerClass"
+              [style.width]="col.width"
+              (click)="col.sortable && toggleSort(col.key)">
+              <span class="uw-table__header-content">
+                {{ col.header }}
+                @if (col.sortable) {
+                  <span class="uw-table__sort-icon">
+                    @switch (getSortIcon(col.key)) {
+                      @case ('asc') {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="m8 10 4-4 4 4"/>
+                        </svg>
+                      }
+                      @case ('desc') {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="m8 14 4 4 4-4"/>
+                        </svg>
+                      }
+                      @default {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="m8 10 4-4 4 4"/><path d="m8 14 4 4 4-4"/>
+                        </svg>
+                      }
+                    }
+                  </span>
+                }
+              </span>
+            </th>
+          }
+        </tr>
+        @if (hasFilterableColumns()) {
+          <tr class="uw-table__filter-row">
+            @if (selectionMode() !== 'none') {
+              <th class="uw-table__cell-checkbox"></th>
+            }
+            @for (col of visibleColumns(); track col.key) {
+              <th>
+                @if (col.filterable) {
+                  <input
+                    class="uw-table__filter-input"
+                    [ngModel]="columnFilters().get(col.key) || ''"
+                    (ngModelChange)="onColumnFilter(col.key, $event)"
+                    placeholder="Filtrar {{ col.header | lowercase }}..."
+                  />
+                }
+              </th>
+            }
+          </tr>
+        }
+      </thead>
+
+      <tbody>
+        @if (loading() && displayData().length === 0) {
+          <tr>
+            <td [attr.colspan]="colspan()" class="uw-table__loading-cell">
+              <div class="uw-table__loading-spinner"></div>
+              <span>Carregando...</span>
+            </td>
+          </tr>
+        } @else if (displayData().length === 0) {
+          <tr>
+            <td [attr.colspan]="colspan()" class="uw-table__empty-cell">
+              {{ emptyMessage() }}
+            </td>
+          </tr>
+        } @else {
+          @for (item of displayData(); track keyOf(item)) {
+            <tr
+              class="uw-table__row"
+              [class.uw-table__row--clickable]="clickable()"
+              [class.uw-table__row--selected]="isSelected(keyOf(item))"
+              (click)="clickable() && rowClick.emit(item)">
+              @if (selectionMode() !== 'none') {
+                <td class="uw-table__cell-checkbox" (click)="$event.stopPropagation()">
+                  <input type="checkbox"
+                    [checked]="isSelected(keyOf(item))"
+                    (change)="toggleOne(keyOf(item))" />
+                </td>
+              }
+              @for (col of visibleColumns(); track col.key) {
+                <td class="uw-table__cell" [style.width]="col.width">
+                  @if (tplMap().has(col.key)) {
+                    <ng-container [ngTemplateOutlet]="tplMap().get(col.key)!"
+                      [ngTemplateOutletContext]="{ $implicit: item }" />
+                  } @else {
+                    {{ getValue(item, col.key) }}
+                  }
+                </td>
+              }
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (loading()) {
+    <div class="uw-table__loading-bar"></div>
+  }
+
+  <div class="uw-table__footer">
+    <uw-pagination
+      [page]="page()"
+      [pageSize]="pageSize()"
+      [totalElements]="total()"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)" />
+  </div>
+</div>

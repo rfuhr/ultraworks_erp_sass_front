@@ -1,0 +1,36 @@
+:host { display: block; }
+
+.skeleton-line {
+  height: 16px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #ebeef1 25%, #f7fafd 50%, #ebeef1 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+  background: #ebeef1;
+}
+
+.skeleton-rect {
+  border-radius: 4px;
+  background: #ebeef1;
+}
+
+.skeleton-card-image {
+  height: 120px;
+  background: #ebeef1;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-line { animation: none; }
+}

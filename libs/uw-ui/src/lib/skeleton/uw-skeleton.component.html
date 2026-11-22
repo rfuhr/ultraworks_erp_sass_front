@@ -1,0 +1,24 @@
+@switch (variant()) {
+  @case ('text') {
+    @for (line of linesArray(); track $index) {
+      <div class="skeleton-line" [style.width]="line === lines() && lines() > 1 ? '60%' : '100%'"></div>
+    }
+  }
+  @case ('circle') {
+    <div class="skeleton-circle" [style.width]="width()" [style.height]="height() || width()"></div>
+  }
+  @case ('rect') {
+    <div class="skeleton-rect" [style.width]="width()" [style.height]="height()" [style.border-radius]="borderRadius()"></div>
+  }
+  @case ('card') {
+    <div class="skeleton-card-image"></div>
+    @for (line of [1,2,3]; track $index) {
+      <div class="skeleton-line" [style.width]="$index === 2 ? '60%' : '100%'"></div>
+    }
+  }
+  @case ('table-row') {
+    @for (col of [1,2,3,4]; track $index) {
+      <div class="skeleton-line" style="display: inline-block; width: 20%; margin-right: 8px;"></div>
+    }
+  }
+}

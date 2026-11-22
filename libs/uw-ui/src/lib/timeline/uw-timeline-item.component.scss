@@ -1,0 +1,36 @@
+:host { display: block; }
+.timeline-item { position: relative; padding-left: 24px; padding-bottom: 24px; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-marker {
+  position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid #0041c8; background: #0041c8; display: flex; align-items: center; justify-content: center; transform: translateX(-50%);
+}
+.timeline-marker-icon { font-size: 10px; color: #fff; }
+.timeline-content { padding-left: 8px; }
+.timeline-title { font-size: 14px; font-weight: 600; color: #181c1e; margin: 0 0 4px; }
+.timeline-description { font-size: 12px; color: #434654; margin: 0 0 2px; }
+.timeline-timestamp { font-size: 12px; color: #747686; font-family: 'JetBrains Mono', monospace; }
+
+/* Centered layout (alternate mode or explicit side) */
+.timeline--centered .timeline-item { padding-left: 0; }
+.timeline--centered .timeline-marker { left: 50%; }
+.timeline--centered .timeline-item--left .timeline-content {
+  padding-right: calc(50% + 20px); padding-left: 0; text-align: right;
+}
+.timeline--centered .timeline-item--right .timeline-content {
+  padding-left: calc(50% + 20px); text-align: left;
+}
+.timeline--centered .timeline-item--left .timeline-marker { left: calc(50% - 8px); }
+.timeline--centered .timeline-item--right .timeline-marker { left: calc(50% + 8px); }
+
+/* Automatic alternating in centered mode (lowest specificity via :where) */
+.timeline--centered :where(.timeline-item:nth-child(odd)) .timeline-content { padding-left: calc(50% + 20px); text-align: left; }
+.timeline--centered :where(.timeline-item:nth-child(even)) .timeline-content { padding-right: calc(50% + 20px); padding-left: 0; text-align: right; }
+.timeline--centered :where(.timeline-item:nth-child(odd)) .timeline-marker { left: calc(50% + 8px); }
+.timeline--centered :where(.timeline-item:nth-child(even)) .timeline-marker { left: calc(50% - 8px); }
+
+/* Explicit side sempre sobrescreve alternância automática */
+.timeline--centered .timeline-item--left .timeline-content { padding-left: 0; padding-right: calc(50% + 20px); text-align: right; }
+.timeline--centered .timeline-item--right .timeline-content { padding-right: 0; padding-left: calc(50% + 20px); text-align: left; }
+.timeline--centered .timeline-item--left .timeline-marker { left: calc(50% - 8px); }
+.timeline--centered .timeline-item--right .timeline-marker { left: calc(50% + 8px); }

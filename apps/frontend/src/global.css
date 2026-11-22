@@ -1,0 +1,46 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color-scheme: light;
+  margin: 0;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-family-body);
+}
+
+.cdk-overlay-container {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cdk-overlay-pane {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+@keyframes uw-ripple-anim {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

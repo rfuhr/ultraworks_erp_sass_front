@@ -1,0 +1,104 @@
+.uw-progress-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+
+  &__node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 56px;
+    text-align: center;
+  }
+
+  &__dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface-container);
+    color: var(--color-outline);
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &--done {
+      background: var(--color-primary);
+      color: var(--color-on-primary);
+    }
+
+    &--current {
+      background: var(--color-primary);
+      color: var(--color-on-primary);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 18%, transparent);
+    }
+
+    &--pending {
+      background: var(--color-surface-container);
+      color: var(--color-outline);
+    }
+
+    &--disabled {
+      background: transparent;
+      border: 1.5px dashed var(--color-outline-variant);
+      color: var(--color-outline);
+    }
+
+    &--error {
+      background: var(--color-error);
+      color: var(--color-on-error);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-error) 16%, transparent);
+    }
+  }
+
+  &__label {
+    font-size: 0.6875rem;
+    line-height: 1.25;
+    color: var(--color-outline);
+
+    &--done {
+      color: var(--color-on-surface);
+      font-weight: 600;
+    }
+
+    &--disabled {
+      color: var(--color-outline);
+      font-style: italic;
+    }
+
+    &--error {
+      color: var(--color-error);
+      font-weight: 600;
+    }
+  }
+
+  &__hint {
+    display: block;
+    font-size: 0.59375rem;
+    font-style: normal;
+    color: var(--color-outline);
+    margin-top: 1px;
+  }
+
+  &__connector {
+    flex: 1;
+    height: 2px;
+    margin-top: 10px;
+    min-width: 14px;
+    background: var(--color-outline-variant);
+    transition: background 0.15s ease;
+
+    &--completed {
+      background: var(--color-primary);
+    }
+
+    &--disabled {
+      background: repeating-linear-gradient(
+        90deg,
+        var(--color-outline-variant) 0 4px,
+        transparent 4px 8px
+      );
+    }
+  }
+}

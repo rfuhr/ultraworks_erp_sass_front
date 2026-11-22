@@ -1,0 +1,65 @@
+<div class="uw-pick-list__wrapper">
+  <button
+    class="uw-pick-list__trigger"
+    [class.uw-pick-list__trigger--open]="isOpen()"
+    [class.uw-pick-list__trigger--has-value]="hasValue()"
+    [class.uw-pick-list__trigger--invalid]="!!error()"
+    [disabled]="isDisabled()"
+    (click)="toggleDropdown()"
+    (keydown)="onKeydown($event)"
+    type="button"
+    #triggerEl
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+  >
+    <span class="uw-pick-list__trigger-text">
+      @if (hasValue()) {
+        {{ selectedLabel() }}
+      } @else {
+        {{ placeholder() }}
+      }
+    </span>
+  </button>
+  <span class="uw-pick-list__chevron material-symbols-outlined" aria-hidden="true">expand_more</span>
+  @if (clearable() && hasValue()) {
+    <button class="uw-pick-list__clear" (click)="onClear($event)" aria-label="Limpar seleção" type="button">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  }
+</div>
+<div class="uw-pick-list__footer">
+  <div class="uw-pick-list__messages">
+    @if (hint(); as hintText) {
+      <p class="uw-pick-list__hint">{{ hintText }}</p>
+    }
+    @if (error(); as errorMsg) {
+      <p class="uw-pick-list__error">{{ errorMsg }}</p>
+    }
+  </div>
+</div>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen()"
+  (overlayOutsideClick)="closeDropdown()"
+  (detach)="closeDropdown()"
+  cdkConnectedOverlayHasBackdrop
+  cdkConnectedOverlayBackdropClass="uw-pick-list__backdrop"
+  [cdkConnectedOverlayWidth]="triggerWidth()"
+  [cdkConnectedOverlayMinWidth]="triggerWidth()"
+>
+  <div class="uw-pick-list__panel" #panelEl>
+    @for (opt of options(); track opt.value; let i = $index) {
+      <button
+        class="uw-pick-list__option"
+        [class.uw-pick-list__option--selected]="opt.value === value()"
+        [class.uw-pick-list__option--highlighted]="i === highlightedIndex()"
+        (click)="onSelect(opt)"
+        type="button"
+      >
+        {{ opt.label }}
+      </button>
+    }
+  </div>
+</ng-template>

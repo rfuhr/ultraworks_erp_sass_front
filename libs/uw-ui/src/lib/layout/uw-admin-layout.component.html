@@ -1,0 +1,40 @@
+<div class="uw-layout" [class.uw-layout--collapsed]="collapsed()">
+  <uw-sidebar
+    class="uw-layout__sidebar"
+    [class.uw-layout__sidebar--mobile-open]="mobileOpen()"
+    [items]="menuItems()"
+    [bottomItems]="bottomItems()"
+    [user]="user()"
+    [collapsed]="collapsed()"
+    [title]="sidebarTitle()"
+    (navigate)="navigate.emit($event)"
+    (toggle)="toggleSidebar()"
+    (logout)="logout.emit()"
+  />
+
+  @if (mobileOpen()) {
+    <button
+      type="button"
+      class="uw-layout__overlay"
+      aria-label="Fechar menu"
+      (click)="closeMobile()"
+    ></button>
+  }
+
+  <div class="uw-layout__main">
+    <uw-header
+      [title]="title()"
+      [user]="user()"
+      [unreadCount]="unreadCount()"
+      (toggleSidebar)="toggleSidebar()"
+      (notificationsClick)="notificationsClick.emit()"
+      (profileClick)="closeMobile()"
+    />
+
+    <uw-subheader [items]="breadcrumb()" />
+
+    <main class="uw-layout__content">
+      <ng-content />
+    </main>
+  </div>
+</div>

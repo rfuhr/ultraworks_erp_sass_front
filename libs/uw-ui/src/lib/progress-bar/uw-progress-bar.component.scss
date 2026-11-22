@@ -1,0 +1,46 @@
+.uw-progress-bar {
+  width: 100%;
+  background: var(--color-primary-container);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  &__fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 300ms ease, background 300ms ease;
+    position: relative;
+  }
+
+  &--indeterminate {
+    .uw-progress-bar__fill {
+      animation: uw-progress-bar-indeterminate 1.5s ease-in-out infinite;
+    }
+  }
+
+  &__label {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-on-surface-variant);
+    white-space: nowrap;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes uw-progress-bar-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}

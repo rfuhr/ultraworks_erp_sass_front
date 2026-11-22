@@ -1,0 +1,61 @@
+:host { display: block; }
+
+.textarea-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.textarea-label {
+  font-family: var(--font-family-body);
+  font-size: 14px;
+  color: #434654;
+  font-weight: 500;
+}
+
+.textarea-field {
+  width: 100%;
+  padding: 8px 12px;
+  font-family: var(--font-family-body);
+  font-size: 0.8125rem;
+  background: #f9f8ff;
+  border: 1.5px solid color-mix(in srgb, #0041c8 12%, transparent);
+  border-radius: 10px;
+  color: var(--color-on-surface);
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color 150ms, box-shadow 150ms;
+}
+
+.textarea-field:focus {
+  background: #fff;
+  border-color: #0041c8;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #0041c8 8%, transparent);
+}
+
+.textarea-field:disabled {
+  opacity: 0.5;
+  background: #ebeef1;
+  cursor: not-allowed;
+}
+
+.textarea-auto-resize {
+  resize: none;
+  overflow: hidden;
+}
+
+.textarea-counter {
+  text-align: right;
+  font-size: 12px;
+  color: #434654;
+}
+
+.textarea-error .textarea-field {
+  border-color: #ba1a1a;
+}
+
+.textarea-error-message {
+  font-size: 12px;
+  color: #ba1a1a;
+}

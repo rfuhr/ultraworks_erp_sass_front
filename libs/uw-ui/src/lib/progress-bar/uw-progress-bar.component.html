@@ -1,0 +1,8 @@
+<div class="uw-progress-bar__wrapper">
+  <div [class]="trackClass()">
+    <div class="uw-progress-bar__fill" [style]="barStyle()"></div>
+  </div>
+  @if (showLabelText()) {
+    <span class="uw-progress-bar__label">{{ clampedValue() }}%</span>
+  }
+</div>

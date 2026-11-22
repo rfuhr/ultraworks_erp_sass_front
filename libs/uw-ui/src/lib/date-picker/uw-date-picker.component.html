@@ -1,0 +1,252 @@
+@if (!inline()) {
+  <div class="datepicker-wrapper" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+    @if (customInputTemplate) {
+      <ng-container [ngTemplateOutlet]="customInputTemplate" [ngTemplateOutletContext]="{$implicit: toggleCalendar}" />
+    } @else {
+      <div class="datepicker-input-wrapper"
+        [class.datepicker-input-wrapper--disabled]="isDisabled()"
+        [class.datepicker-input-wrapper--invalid]="invalid() || !!error()"
+        (click)="toggleCalendar()"
+        (keydown.enter)="toggleCalendar()"
+        (keydown.space)="toggleCalendar(); $event.preventDefault()"
+        tabindex="0">
+        <input
+          [value]="isOpen() ? typedValue() : displayValue()"
+          (input)="onInputChange($any($event.target).value)"
+          (keydown)="onInputKeydown($event)"
+          (blur)="onInputBlur($event)"
+          [placeholder]="editable() ? inputFormatHint() : placeholder()"
+          [readonly]="isReadonly()"
+          class="datepicker-input"
+          [disabled]="isDisabled()"
+        />
+        @if (showIcon()) {
+          <button class="datepicker-icon-btn" (click)="toggleCalendar(); $event.stopPropagation()" type="button" tabindex="-1">
+            <span class="material-symbols-outlined">calendar_month</span>
+          </button>
+        } @else {
+          <span class="material-symbols-outlined">calendar_month</span>
+        }
+      </div>
+      <div class="datepicker-footer">
+        <div class="datepicker-messages">
+          @if (hint(); as hintText) {
+            <p class="datepicker-hint">{{ hintText }}</p>
+          }
+          @if (error(); as errorMsg) {
+            <p class="datepicker-error">{{ errorMsg }}</p>
+          }
+        </div>
+      </div>
+    }
+    <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayOrigin]="trigger"
+      [cdkConnectedOverlayOpen]="isOpen()"
+      [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
+      [cdkConnectedOverlayPositions]="overlayPositions"
+      (overlayOutsideClick)="close()"
+      cdkTrapFocus
+    >
+      <div class="datepicker-calendar" role="dialog" aria-label="Selecionar data" (keydown)="handleKeydown($event)">
+        @if (!isTimeOnly()) {
+          <ng-container *ngTemplateOutlet="calendarContent" />
+        }
+        @if (effectiveShowTime()) {
+          <ng-container *ngTemplateOutlet="timePickerContent" />
+        }
+        @if (showTodayButton() || showClearButton()) {
+          <div class="datepicker-actions">
+            @if (showTodayButton()) {
+              <button class="datepicker-action-btn" (click)="selectToday()" type="button">Hoje</button>
+            }
+            @if (showClearButton()) {
+              <button class="datepicker-action-btn" (click)="clearSelection()" type="button">Limpar</button>
+            }
+          </div>
+        }
+      </div>
+    </ng-template>
+  </div>
+} @else {
+  <div class="datepicker-inline" role="group" aria-label="Selecionar data" (keydown)="handleKeydown($event)">
+    @if (!isTimeOnly()) {
+      <ng-container *ngTemplateOutlet="calendarContent" />
+    }
+    @if (effectiveShowTime()) {
+      <ng-container *ngTemplateOutlet="timePickerContent" />
+    }
+  </div>
+}
+
+<ng-template #calendarContent>
+  @if (multiCalendarDays().length > 1) {
+    <div class="datepicker-calendars-multi">
+      @for (mc of multiCalendarDays(); track mc.offset) {
+        <div class="datepicker-calendar-month">
+          <div class="datepicker-header">
+            <button (click)="prevMonth()" class="datepicker-nav" type="button">&lt;</button>
+            @if (monthNavigator() || yearNavigator()) {
+              <div class="datepicker-header-selects">
+                @if (monthNavigator()) {
+                  <div class="dp-nav-dropdown">
+                    <button class="dp-nav-dropdown__trigger" (click)="toggleMonthDropdown()" type="button">
+                      {{ months()[currentMonth()].label }} <span class="dp-nav-dropdown__arrow material-symbols-outlined">expand_more</span>
+                    </button>
+                    @if (monthDropdownOpen()) {
+                      <div class="dp-nav-dropdown__panel">
+                        @for (m of months(); track m.value) {
+                          <button class="dp-nav-dropdown__option" [class.dp-nav-dropdown__option--selected]="m.value === currentMonth()" (click)="goToMonth(m.value)" type="button">{{ m.label }}</button>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+                @if (yearNavigator()) {
+                  <div class="dp-nav-dropdown">
+                    <button class="dp-nav-dropdown__trigger" (click)="toggleYearDropdown()" type="button">
+                      {{ currentYear() }} <span class="dp-nav-dropdown__arrow material-symbols-outlined">expand_more</span>
+                    </button>
+                    @if (yearDropdownOpen()) {
+                      <div class="dp-nav-dropdown__panel">
+                        @for (y of years(); track y.value) {
+                          <button class="dp-nav-dropdown__option" [class.dp-nav-dropdown__option--selected]="y.value === currentYear()" (click)="goToYear(y.value)" type="button">{{ y.label }}</button>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            } @else {
+              <span class="datepicker-title">{{ mc.label }}</span>
+            }
+            <button (click)="nextMonth()" class="datepicker-nav" type="button">&gt;</button>
+          </div>
+          <div class="datepicker-weekdays">
+            @for (day of weekdays(); track $index) {
+              <span class="datepicker-weekday">{{ day }}</span>
+            }
+          </div>
+          <div class="datepicker-days">
+            @for (day of mc.days; track $index) {
+              <button
+                class="datepicker-day"
+                [class.datepicker-day-today]="day.isToday"
+                [class.datepicker-day-selected]="day.isSelected"
+                [class.datepicker-day-disabled]="day.isDisabled"
+                [class.datepicker-day-other-month]="!day.isCurrentMonth"
+                [class.datepicker-day-in-range]="day.isInRange"
+                [disabled]="day.isDisabled"
+                (click)="selectDay(day)"
+                type="button"
+              >{{ day.date.getDate() }}</button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="datepicker-calendar-month">
+      <div class="datepicker-header">
+        <button (click)="prevMonth()" class="datepicker-nav" type="button">&lt;</button>
+        @if (monthNavigator() || yearNavigator()) {
+          <div class="datepicker-header-selects">
+            @if (monthNavigator()) {
+              <div class="dp-nav-dropdown">
+                <button class="dp-nav-dropdown__trigger" (click)="toggleMonthDropdown()" type="button">
+                  {{ months()[currentMonth()].label }} <span class="dp-nav-dropdown__arrow material-symbols-outlined">expand_more</span>
+                </button>
+                @if (monthDropdownOpen()) {
+                  <div class="dp-nav-dropdown__panel">
+                    @for (m of months(); track m.value) {
+                      <button class="dp-nav-dropdown__option" [class.dp-nav-dropdown__option--selected]="m.value === currentMonth()" (click)="goToMonth(m.value)" type="button">{{ m.label }}</button>
+                    }
+                  </div>
+                }
+              </div>
+            }
+            @if (yearNavigator()) {
+              <div class="dp-nav-dropdown">
+                <button class="dp-nav-dropdown__trigger" (click)="toggleYearDropdown()" type="button">
+                  {{ currentYear() }} <span class="dp-nav-dropdown__arrow material-symbols-outlined">expand_more</span>
+                </button>
+                @if (yearDropdownOpen()) {
+                  <div class="dp-nav-dropdown__panel">
+                    @for (y of years(); track y.value) {
+                      <button class="dp-nav-dropdown__option" [class.dp-nav-dropdown__option--selected]="y.value === currentYear()" (click)="goToYear(y.value)" type="button">{{ y.label }}</button>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <span class="datepicker-title">{{ monthYearLabel() }}</span>
+        }
+        <button (click)="nextMonth()" class="datepicker-nav" type="button">&gt;</button>
+      </div>
+      <div class="datepicker-weekdays">
+        @for (day of weekdays(); track $index) {
+          <span class="datepicker-weekday">{{ day }}</span>
+        }
+      </div>
+      <div class="datepicker-days">
+        @for (day of calendarDays(); track $index) {
+          <button
+            class="datepicker-day"
+            [class.datepicker-day-today]="day.isToday"
+            [class.datepicker-day-selected]="day.isSelected"
+            [class.datepicker-day-disabled]="day.isDisabled"
+            [class.datepicker-day-other-month]="!day.isCurrentMonth"
+            [class.datepicker-day-in-range]="day.isInRange"
+            [disabled]="day.isDisabled"
+            (click)="selectDay(day)"
+            type="button"
+          >{{ day.date.getDate() }}</button>
+        }
+      </div>
+    </div>
+  }
+</ng-template>
+
+<ng-template #timePickerContent>
+  <div class="datepicker-timepicker">
+    @if (isTimeOnly()) {
+      <div class="datepicker-timepicker-header">
+        <span class="datepicker-timepicker-label">Selecionar horário</span>
+      </div>
+    }
+    <div class="datepicker-timepicker-controls">
+      <div class="datepicker-timepicker-unit">
+        <button class="datepicker-timepicker-stepper" (click)="incrementHour()" type="button">&#9650;</button>
+        <span class="datepicker-timepicker-value">{{ selectedHour() | number:'2.0-0' }}</span>
+        <button class="datepicker-timepicker-stepper" (click)="decrementHour()" type="button">&#9660;</button>
+        <span class="datepicker-timepicker-lbl">HH</span>
+      </div>
+      <span class="datepicker-timepicker-sep">{{ timeSeparator() }}</span>
+      <div class="datepicker-timepicker-unit">
+        <button class="datepicker-timepicker-stepper" (click)="incrementMinute()" type="button">&#9650;</button>
+        <span class="datepicker-timepicker-value">{{ selectedMinute() | number:'2.0-0' }}</span>
+        <button class="datepicker-timepicker-stepper" (click)="decrementMinute()" type="button">&#9660;</button>
+        <span class="datepicker-timepicker-lbl">MM</span>
+      </div>
+      @if (showSeconds()) {
+        <span class="datepicker-timepicker-sep">{{ timeSeparator() }}</span>
+        <div class="datepicker-timepicker-unit">
+          <button class="datepicker-timepicker-stepper" (click)="incrementSecond()" type="button">&#9650;</button>
+          <span class="datepicker-timepicker-value">{{ selectedSecond() | number:'2.0-0' }}</span>
+          <button class="datepicker-timepicker-stepper" (click)="decrementSecond()" type="button">&#9660;</button>
+          <span class="datepicker-timepicker-lbl">SS</span>
+        </div>
+      }
+      @if (hourFormat() === '12') {
+        <button class="datepicker-timepicker-ampm" (click)="toggleAmPm()" type="button">
+          {{ selectedHour() >= 12 ? 'PM' : 'AM' }}
+        </button>
+      }
+    </div>
+    @if (!isTimeOnly()) {
+      <button class="datepicker-timepicker-done" (click)="confirmTime()" type="button">OK</button>
+    }
+  </div>
+</ng-template>

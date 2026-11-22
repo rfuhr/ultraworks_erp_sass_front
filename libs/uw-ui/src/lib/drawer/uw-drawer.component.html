@@ -1,0 +1,32 @@
+@if (open()) {
+  @if (showOverlay()) {
+    <div class="drawer-overlay" (click)="close.emit()"></div>
+  }
+  <div class="drawer-panel" [class]="'drawer-' + position() + ' drawer-size-' + size()" cdkTrapFocus cdkTrapFocusAutoCapture role="dialog" aria-modal="true" [attr.aria-label]="title()">
+    <div class="drawer-header" [ngClass]="headerClass()">
+      <div class="drawer-header__main">
+        @if (headerTemplate) {
+          <ng-container [ngTemplateOutlet]="headerTemplate" />
+        } @else {
+          <div class="flex flex-col">
+            <h2 class="drawer-title">{{ title() }}</h2>
+            @if (subTitle()) {
+              <p class="drawer-subtitle">{{ subTitle() }}</p>
+            }
+          </div>
+        }
+      </div>
+      <button class="drawer-close" (click)="close.emit()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <ng-content></ng-content>
+    </div>
+    @if (footerTemplate) {
+      <div class="drawer-footer">
+        <ng-container [ngTemplateOutlet]="footerTemplate"></ng-container>
+      </div>
+    }
+  </div>
+}

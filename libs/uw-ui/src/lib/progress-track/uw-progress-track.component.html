@@ -1,0 +1,27 @@
+<div class="uw-progress-track" role="list" [attr.aria-label]="ariaLabel() ?? null">
+  @for (step of trilha(); track $index; let i = $index; let isLast = $last) {
+    <div
+      class="uw-progress-track__node"
+      role="listitem"
+      [attr.aria-disabled]="ariaHabilitado(step)"
+    >
+      <div class="uw-progress-track__dot" [ngClass]="classeDoPonto(step)">
+        <uw-icon [name]="icone(step)" size="xs" />
+      </div>
+      <span class="uw-progress-track__label" [ngClass]="classeDoRotulo(step)">
+        {{ step.label }}
+        @if (step.hint) {
+          <span class="uw-progress-track__hint">{{ step.hint }}</span>
+        }
+      </span>
+    </div>
+
+    @if (!isLast) {
+      <div
+        class="uw-progress-track__connector"
+        [ngClass]="classeDoConector(i)"
+        aria-hidden="true"
+      ></div>
+    }
+  }
+</div>

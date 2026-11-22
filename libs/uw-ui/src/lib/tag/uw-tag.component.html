@@ -1,0 +1,13 @@
+<span [class]="tagClass()" [style]="customStyles()">
+  {{ label() }}
+  @if (removable()) {
+    <button
+      type="button"
+      class="uw-tag__remove"
+      (click)="onRemove()"
+      aria-label="Remover"
+    >
+      <uw-icon name="close" size="xs" />
+    </button>
+  }
+</span>

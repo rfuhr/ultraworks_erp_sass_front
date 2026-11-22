@@ -1,0 +1,28 @@
+<uw-button
+  icon="help_outline"
+  variant="outline"
+  [iconOnly]="true"
+  (clicked)="toggle()"
+/>
+
+<uw-drawer
+  [open]="isOpen()"
+  [title]="content().title"
+  headerClass="uw-drawer-header--help"
+  [showOverlay]="false"
+  (close)="isOpen.set(false)"
+>
+  @for (section of content().sections; track section.id) {
+    <div class="uw-help__section">
+      <h3 class="uw-help__section-title">{{ section.title }}</h3>
+      <p class="uw-help__section-body">{{ section.body }}</p>
+      @if (section.rules.length > 0) {
+        <ul class="uw-help__rules">
+          @for (rule of section.rules; track rule) {
+            <li class="uw-help__rule">{{ rule }}</li>
+          }
+        </ul>
+      }
+    </div>
+  }
+</uw-drawer>

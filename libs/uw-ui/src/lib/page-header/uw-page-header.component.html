@@ -1,0 +1,23 @@
+<div class="uw-page-header">
+  @if (backLabel()) {
+    <uw-button
+      [label]="backLabel()"
+      icon="arrow_back"
+      variant="text"
+      iconPosition="left"
+      class="uw-page-header__back"
+      (clicked)="backClick.emit()"
+    />
+  }
+  <div class="uw-page-header__row">
+    <div class="uw-page-header__content">
+      <h1 class="uw-page-header__title">{{ title() }}</h1>
+      @if (description()) {
+        <p class="uw-page-header__description">{{ description() }}</p>
+      }
+    </div>
+    <div class="uw-page-header__actions">
+      <ng-content />
+    </div>
+  </div>
+</div>

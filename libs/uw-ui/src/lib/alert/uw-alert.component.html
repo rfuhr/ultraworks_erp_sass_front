@@ -1,0 +1,18 @@
+@if (visible()) {
+  <div [class]="alertClass()">
+    <uw-icon class="uw-alert__icon" [name]="iconName()" size="md" />
+    <p class="uw-alert__message">
+      <ng-content />
+    </p>
+    @if (dismissible()) {
+      <button
+        type="button"
+        class="uw-alert__close"
+        (click)="onDismiss()"
+        aria-label="Fechar"
+      >
+        <uw-icon name="close" size="xs" />
+      </button>
+    }
+  </div>
+}

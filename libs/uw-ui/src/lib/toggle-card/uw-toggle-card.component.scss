@@ -1,0 +1,190 @@
+uw-toggle-card {
+  display: block;
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-lg);
+  }
+
+  .toggle-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-tint);
+    border: 1.5px solid var(--color-outline-variant);
+    transition: background 150ms ease, border 150ms ease;
+
+    &--clickable-card {
+      cursor: pointer;
+    }
+
+    &--clickable-toggle {
+      cursor: default;
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--checked {
+      &.toggle-card--variant-primary {
+        background: color-mix(in srgb, var(--color-primary-container) calc(var(--toggle-card-opacity, 1) * 100%), transparent);
+        border-color: color-mix(in srgb, var(--color-primary) calc(var(--toggle-card-opacity, 1) * 30%), transparent);
+      }
+
+      &.toggle-card--variant-success {
+        background: color-mix(in srgb, var(--color-success-container) calc(var(--toggle-card-opacity, 1) * 100%), transparent);
+        border-color: color-mix(in srgb, var(--color-success) calc(var(--toggle-card-opacity, 1) * 30%), transparent);
+      }
+
+      &.toggle-card--variant-warning {
+        background: color-mix(in srgb, var(--color-warning-container) calc(var(--toggle-card-opacity, 1) * 100%), transparent);
+        border-color: color-mix(in srgb, var(--color-warning) calc(var(--toggle-card-opacity, 1) * 30%), transparent);
+      }
+
+      &.toggle-card--variant-error {
+        background: color-mix(in srgb, var(--color-error-container) calc(var(--toggle-card-opacity, 1) * 100%), transparent);
+        border-color: color-mix(in srgb, var(--color-error) calc(var(--toggle-card-opacity, 1) * 30%), transparent);
+      }
+
+      &.toggle-card--variant-info {
+        background: color-mix(in srgb, var(--color-info-container) calc(var(--toggle-card-opacity, 1) * 100%), transparent);
+        border-color: color-mix(in srgb, var(--color-info) calc(var(--toggle-card-opacity, 1) * 30%), transparent);
+      }
+    }
+
+  }
+
+  .toggle-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+    transition: background 150ms ease;
+    background: var(--color-surface-container);
+
+    uw-icon {
+      color: var(--color-on-surface-variant);
+    }
+  }
+
+  .toggle-card--variant-primary .toggle-card__icon {
+    background: color-mix(in srgb, var(--color-primary), transparent 95%);
+  }
+
+  .toggle-card--variant-success .toggle-card__icon {
+    background: color-mix(in srgb, var(--color-success), transparent 95%);
+  }
+
+  .toggle-card--variant-warning .toggle-card__icon {
+    background: color-mix(in srgb, var(--color-warning), transparent 95%);
+  }
+
+  .toggle-card--variant-error .toggle-card__icon {
+    background: color-mix(in srgb, var(--color-error), transparent 95%);
+  }
+
+  .toggle-card--variant-info .toggle-card__icon {
+    background: color-mix(in srgb, var(--color-info), transparent 95%);
+  }
+
+  .toggle-card--checked.toggle-card--variant-primary .toggle-card__icon {
+    background: color-mix(in srgb, var(--color-primary), transparent 65%);
+  }
+
+  .toggle-card--checked.toggle-card--variant-success .toggle-card__icon {
+    background: color-mix(in srgb, var(--color-success), transparent 65%);
+  }
+
+  .toggle-card--checked.toggle-card--variant-warning .toggle-card__icon {
+    background: color-mix(in srgb, var(--color-warning), transparent 65%);
+  }
+
+  .toggle-card--checked.toggle-card--variant-error .toggle-card__icon {
+    background: color-mix(in srgb, var(--color-error), transparent 65%);
+  }
+
+  .toggle-card--checked.toggle-card--variant-info .toggle-card__icon {
+    background: color-mix(in srgb, var(--color-info), transparent 65%);
+  }
+
+  .toggle-card--disabled .toggle-card__icon,
+  .toggle-card--disabled.toggle-card--checked .toggle-card__icon {
+    background: var(--color-surface-tint);
+
+    uw-icon {
+      color: var(--color-outline);
+    }
+  }
+
+  .toggle-card__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toggle-card__label {
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-on-surface);
+    line-height: 1.4;
+  }
+
+  .toggle-card__description {
+    font-family: var(--font-family-body);
+    font-size: 12px;
+    color: var(--color-on-surface-variant);
+    line-height: 1.4;
+  }
+
+  .toggle-card__switch {
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background: var(--color-surface-container);
+    position: relative;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background 150ms ease;
+
+    &--checked {
+      background: var(--color-primary);
+
+      .toggle-card__thumb {
+        transform: translateX(20px);
+      }
+    }
+  }
+
+  .toggle-card__thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 150ms ease;
+  }
+
+  .toggle-card--disabled &__switch {
+    cursor: not-allowed;
+  }
+
+  .toggle-card--checked &__icon {
+    uw-icon {
+      color: var(--color-on-primary);
+    }
+  }
+}

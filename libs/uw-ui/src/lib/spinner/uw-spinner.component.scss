@@ -1,0 +1,54 @@
+:host { display: inline-flex; align-items: center; justify-content: center; }
+
+.spinner-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.spinner-indeterminate {
+  border: 3px solid #ebeef1;
+  border-top-color: #0041c8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner-svg { transform: rotate(-90deg); }
+
+.spinner-track { stroke: #ebeef1; }
+
+.spinner-fill {
+  stroke-linecap: round;
+  transition: stroke-dashoffset 300ms;
+}
+
+.spinner-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: #181c1e;
+}
+
+.spinner-label {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #434654;
+}

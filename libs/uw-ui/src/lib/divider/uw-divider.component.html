@@ -1,0 +1,15 @@
+@if (orientation() === 'vertical') {
+  <div class="divider-vertical" [style.width.px]="thickness()" role="separator" aria-orientation="vertical"></div>
+} @else if (label() || icon()) {
+  <div class="divider-with-label" role="separator" aria-orientation="horizontal">
+    <span class="divider-line" [style.height.px]="thickness()"></span>
+    @if (icon()) {
+      <span class="material-symbols-outlined divider-icon">{{ icon() }}</span>
+    } @else {
+      <span class="divider-text">{{ label() }}</span>
+    }
+    <span class="divider-line" [style.height.px]="thickness()"></span>
+  </div>
+} @else {
+  <div class="divider-horizontal" [style.height.px]="thickness()" role="separator" aria-orientation="horizontal"></div>
+}

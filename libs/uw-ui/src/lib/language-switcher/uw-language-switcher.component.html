@@ -1,0 +1,22 @@
+<div class="uw-lang-switcher">
+  <button class="uw-lang-switcher__trigger" [uwPopoverTriggerFor]="langPopover" aria-label="Language" title="Change language">
+    <uw-icon name="language" />
+  </button>
+  <uw-popover #langPopover>
+    <div class="uw-lang-switcher__menu">
+      @for (lang of languages(); track lang.code) {
+        <button
+          class="uw-lang-switcher__option"
+          [class.uw-lang-switcher__option--active]="selectedLang === lang.code"
+          (click)="selectLanguage(lang.code)"
+        >
+          <span class="uw-lang-switcher__flag">{{ lang.flag }}</span>
+          <span class="uw-lang-switcher__label">{{ lang.label }}</span>
+          @if (selectedLang === lang.code) {
+            <uw-icon name="check" class="uw-lang-switcher__check" />
+          }
+        </button>
+      }
+    </div>
+  </uw-popover>
+</div>

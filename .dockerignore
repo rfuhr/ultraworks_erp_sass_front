@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.angular
+coverage
+storybook-static
+playwright-report
+test-results
+*.log

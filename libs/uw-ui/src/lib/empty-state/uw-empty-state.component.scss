@@ -1,0 +1,61 @@
+:host { display: flex; justify-content: center; }
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.empty-state-sm {
+  flex-direction: row;
+  gap: 12px;
+  .empty-state-icon { font-size: 24px; }
+}
+
+.empty-state-md {
+  gap: 16px;
+  .empty-state-icon { font-size: 48px; }
+  .empty-state-title { font-size: 18px; }
+}
+
+.empty-state-lg {
+  gap: 24px;
+  padding: 64px 0;
+  .empty-state-icon { font-size: 64px; }
+  .empty-state-title { font-size: 24px; }
+}
+
+.empty-state-icon { color: #e5e8eb; opacity: 0.6; }
+
+.empty-state-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  color: #181c1e;
+  margin: 0;
+}
+
+.empty-state-description {
+  font-size: 14px;
+  color: #434654;
+  margin: 0;
+}
+
+.empty-state-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #0041c8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  transition: background 150ms;
+
+  &:hover { background: #0035a0; }
+
+  .material-symbols-outlined { font-size: 16px; }
+}

@@ -1,0 +1,56 @@
+uw-page-header {
+  display: block;
+}
+
+.uw-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+
+  &__row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: #0f0e1a;
+    letter-spacing: -0.02em;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  &__description {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #9896b8;
+    margin: 4px 0 0 0;
+    line-height: 1.0;
+  }
+
+  &__back {
+    align-self: flex-start;
+    line-height: 1;
+
+    button {
+      padding: 0;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+  gap: 0.125rem;
+    flex-shrink: 0;
+  }
+}

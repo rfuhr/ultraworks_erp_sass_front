@@ -1,0 +1,46 @@
+<div class="autocomplete-wrapper" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+  <div class="autocomplete-input-wrapper">
+    <input
+      #inputEl
+      [value]="searchTerm()"
+      (input)="onInputChange($event)"
+      (keydown)="onKeydown($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      [placeholder]="placeholder()"
+      [disabled]="disabled()"
+      class="autocomplete-input"
+      role="combobox"
+      [attr.aria-expanded]="isOpen()"
+      [attr.aria-activedescendant]="activeDescendant()"
+    />
+    <span class="material-symbols-outlined autocomplete-arrow">arrow_drop_down</span>
+  </div>
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="isOpen()"
+    (overlayOutsideClick)="close()"
+    [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.offsetWidth"
+  >
+    <div class="autocomplete-dropdown" role="listbox">
+      @if (loading()) {
+        <div class="autocomplete-loading">Carregando...</div>
+      } @else if (filteredOptions().length === 0) {
+        <div class="autocomplete-empty">Nenhum resultado encontrado</div>
+      } @else {
+        @for (option of filteredOptions(); track option.value; let i = $index) {
+          <div
+            class="autocomplete-option"
+            [class.autocomplete-option-active]="i === highlightIndex()"
+            (click)="selectOption(option)"
+            role="option"
+            [attr.aria-selected]="i === highlightIndex()"
+          >
+            {{ option.label }}
+          </div>
+        }
+      }
+    </div>
+  </ng-template>
+</div>

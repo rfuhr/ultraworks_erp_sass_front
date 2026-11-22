@@ -1,0 +1,16 @@
+<label class="toggle-container" [class.toggle-disabled]="isDisabled()">
+  @if (label() && labelPosition() === 'left') {
+    <span class="toggle-label">{{ label() }}</span>
+  }
+  <div
+    class="toggle-track"
+    [class.toggle-checked]="innerValue()"
+    [class.toggle-sm]="size() === 'sm'"
+    (click)="toggle()"
+  >
+    <div class="toggle-thumb"></div>
+  </div>
+  @if (label() && labelPosition() === 'right') {
+    <span class="toggle-label">{{ label() }}</span>
+  }
+</label>

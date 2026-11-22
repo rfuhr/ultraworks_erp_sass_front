@@ -1,0 +1,19 @@
+<div [class]="containerClass()">
+  @for (opt of options(); track $index) {
+    <button
+      type="button"
+      class="uw-btn-option"
+      [class.uw-btn-option--active]="isActive(opt.value)"
+      [disabled]="isDisabled()"
+      (click)="onToggle(opt)"
+    >
+      {{ opt.label }}
+    </button>
+  }
+</div>
+@if (hint(); as hintText) {
+  <p class="uw-select-button-group__hint">{{ hintText }}</p>
+}
+@if (error(); as errorMsg) {
+  <p class="uw-select-button-group__error">{{ errorMsg }}</p>
+}

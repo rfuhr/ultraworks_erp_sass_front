@@ -1,0 +1,43 @@
+<header class="uw-header">
+  <div class="uw-header__start">
+    @if (showSidebarToggle()) {
+      <button
+        type="button"
+        class="uw-header__icon-button uw-header__menu"
+        aria-label="Alternar menu lateral"
+        (click)="toggleSidebar.emit()"
+      >
+        <uw-icon name="menu" />
+      </button>
+    }
+    @if (title()) {
+      <h1 class="uw-header__title">{{ title() }}</h1>
+    }
+  </div>
+
+  <div class="uw-header__actions">
+    <button
+      type="button"
+      class="uw-header__icon-button"
+      [attr.aria-label]="unreadCount() > 0 ? unreadCount() + ' notificações não lidas' : 'Notificações'"
+      (click)="notificationsClick.emit()"
+    >
+      <uw-icon name="notifications" />
+      @if (unreadCount() > 0) {
+        <span class="uw-header__badge" aria-hidden="true">{{ unreadCount() > 9 ? '9+' : unreadCount() }}</span>
+      }
+    </button>
+
+    @if (user(); as currentUser) {
+      <button type="button" class="uw-header__profile" (click)="profileClick.emit()">
+        <uw-avatar [initials]="currentUser.initials ?? currentUser.name.slice(0, 2)" size="sm" />
+        <span class="uw-header__user">
+          <strong>{{ currentUser.name }}</strong>
+          @if (currentUser.role) {
+            <small>{{ currentUser.role }}</small>
+          }
+        </span>
+      </button>
+    }
+  </div>
+</header>

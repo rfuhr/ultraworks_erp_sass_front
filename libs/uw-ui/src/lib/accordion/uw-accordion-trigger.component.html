@@ -1,0 +1,19 @@
+<button
+  class="uw-accordion-trigger"
+  (click)="accordionItem.toggle()"
+  [class.uw-accordion-trigger--expanded]="accordionItem.expanded()"
+  [disabled]="disabled()"
+>
+  <span class="uw-accordion-trigger__content">
+    @if (customIcon(); as icon) {
+      <span class="material-symbols-outlined uw-accordion-trigger__custom-icon">{{ icon }}</span>
+    }
+    <ng-content />
+  </span>
+  <span
+    class="material-symbols-outlined uw-accordion-trigger__chevron"
+    [class.uw-accordion-trigger__chevron--open]="accordionItem.expanded()"
+  >
+    expand_more
+  </span>
+</button>

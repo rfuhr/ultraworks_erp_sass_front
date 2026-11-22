@@ -1,0 +1,22 @@
+<label class="checkbox-container" [class.checkbox-disabled]="isDisabled()">
+  @if (label() && labelPosition() === 'left') {
+    <span class="checkbox-label">{{ label() }}</span>
+  }
+  <div
+    class="checkbox-box"
+    [class.checkbox-checked]="innerValue()"
+    [class.checkbox-indeterminate]="indeterminate()"
+    [class.checkbox-sm]="size() === 'sm'"
+    (click)="toggle()"
+  >
+    @if (innerValue()) {
+      <span class="material-symbols-outlined checkbox-icon">check</span>
+    } @else if (indeterminate()) {
+      <span class="material-symbols-outlined checkbox-icon">remove</span>
+    }
+  </div>
+  @if (label() && labelPosition() === 'right') {
+    <span class="checkbox-label">{{ label() }}</span>
+  }
+  <input type="checkbox" class="checkbox-native" [checked]="innerValue()" [disabled]="isDisabled()" [attr.aria-checked]="innerValue()" tabindex="-1" />
+</label>

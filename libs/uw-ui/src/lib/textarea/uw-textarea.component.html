@@ -1,0 +1,26 @@
+<div class="textarea-wrapper" [class.textarea-error]="hasError()" [class.textarea-disabled]="disabled()">
+  @if (label()) {
+    <label class="textarea-label">{{ label() }}</label>
+  }
+  <textarea
+    #textareaEl
+    [value]="value()"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    [required]="required()"
+    [readonly]="readonly()"
+    [attr.maxlength]="maxlength()"
+    [rows]="rows()"
+    (input)="onInput($event)"
+    (focus)="onFocus()"
+    (blur)="onTouched()"
+    class="textarea-field"
+    [class.textarea-auto-resize]="autoResize()"
+  ></textarea>
+  @if (maxlength()) {
+    <div class="textarea-counter">{{ charCount() }}/{{ maxlength() }}</div>
+  }
+  @if (errorMessage()) {
+    <div class="textarea-error-message">{{ errorMessage() }}</div>
+  }
+</div>

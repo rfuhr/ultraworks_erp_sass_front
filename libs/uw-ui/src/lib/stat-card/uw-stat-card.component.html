@@ -1,0 +1,56 @@
+<div
+  class="uw-stat-card"
+  [style.background]="bgColor() || null"
+  [class.uw-stat-card--compact]="variant() === 'compact'"
+  [class.uw-stat-card--clickable]="isClickable()"
+  [class.uw-stat-card--loading]="loading()"
+  [class.cursor-pointer]="isClickable() || !href()"
+  (click)="onClick()"
+  (keydown.enter)="onClick()"
+  [attr.tabindex]="isClickable() || !href() ? 0 : null"
+  [attr.role]="isClickable() || !href() ? 'button' : null"
+>
+  @if (icon(); as iconName) {
+    <div
+      class="uw-stat-card__icon-box"
+      [class]="compBoxSize()"
+      [style.background]="iconBg()"
+    >
+      @if (!loading()) {
+        <uw-icon [name]="iconName" [size]="iconSize()" [style.color]="iconColor()" />
+      }
+    </div>
+  }
+
+  @if (!loading()) {
+    <div>
+      <p class="uw-stat-card__label">{{ label() }}</p>
+      <p class="uw-stat-card__value" [class.uw-stat-card__value--sm]="valueSize() === 'sm'" [class.uw-stat-card__value--lg]="valueSize() === 'lg'" [style.color]="valueColor() || null">{{ value() }}</p>
+      @if (delta()) {
+        <p class="uw-stat-card__delta" [style.color]="deltaColor()">{{ delta() }}</p>
+      }
+    </div>
+  } @else {
+    <div class="uw-stat-card__skeleton">
+      <span class="uw-stat-card__skeleton-line uw-stat-card__skeleton-line--value"></span>
+      <span class="uw-stat-card__skeleton-line uw-stat-card__skeleton-line--label"></span>
+    </div>
+  }
+
+  @if (sparkline().length >= 2) {
+    <svg
+      class="uw-stat-card__sparkline"
+      viewBox="0 0 100 40"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path
+        [attr.d]="sparklinePath()"
+        [attr.stroke]="sparklineColor()"
+        fill="none"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+    </svg>
+  }
+</div>

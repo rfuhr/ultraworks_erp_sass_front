@@ -1,0 +1,15 @@
+<div class="uw-avatar-group">
+  @for (item of visibleItems(); track item.src; let i = $index) {
+    <uw-avatar
+      [src]="item.src"
+      [initials]="item.initials"
+      [size]="size()"
+      [bgColor]="avatarColor(item, i)"
+    />
+  }
+  @if (remainingCount() > 0) {
+    <div class="uw-avatar-group__remainder">
+      +{{ remainingCount() }}
+    </div>
+  }
+</div>

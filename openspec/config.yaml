@@ -4,25 +4,24 @@ context: |
   Language: Portuguese (pt-BR)
   All artifacts must be written in Brazilian Portuguese.
 
-  Frontend-only monorepo. No backend.
+  Frontend-only Angular template. No backend.
 
   Workspace:
     - Angular CLI multi-project (no Nx)
-    - apps/erp — tenant-facing ERP (erp.<domain>)
-    - apps/platform-admin — SaaS tenant management (admin.<domain>)
+    - apps/frontend — default application
     - libs/tokens, libs/uw-ui, libs/core, libs/data, libs/i18n
-    - Source-mapped libs with @erp/* aliases
-    - One component library (uw-ui) shared by both apps; never fork a component per app
+    - Source-mapped libs with @app/* aliases
+    - One component library (uw-ui); never fork a component per app
     - Storybook is a single project at libs/uw-ui
+    - A second app requires a new ADR
 
   Stack:
     - Angular 21+ with standalone components and signals
-    - TypeScript 5.9+ strict, zero any
+    - TypeScript 5.9+ strict, zero any in new code
     - Tailwind CSS 4
     - uw-ui component library (prefix uw-)
-    - Material Symbols
+    - Self-hosted Material Symbols
     - @ngx-translate/core (pt-BR default, en/es optional)
-    - @swimlane/ngx-charts
     - Jest + jest-preset-angular
     - Playwright
     - Storybook
@@ -30,10 +29,10 @@ context: |
     - Docker + nginx
 
   Architecture:
-    - Feature-first inside each app: apps/<app>/src/app/{features,layout}
-    - libs/core: auth, session, tenant/company/branch context, interceptors, guards, errors
-    - libs/data: models and HTTP repositories per domain
-    - libs/uw-ui: generic components only; must not know domain, auth or HTTP
+    - Feature-first inside the app: apps/frontend/src/app/{features,layout,shared}
+    - libs/core: auth/session skeleton, errors, interceptors, guards
+    - libs/data: models and HTTP repositories
+    - libs/uw-ui: generic presentational components only; must not know domain, auth, HTTP or i18n
     - Dependency direction: tokens <- uw-ui; tokens <- core <- data <- apps/*; i18n <- apps/*
     - An app must never import another app
     - Shell, menu and routes live in the app, never in a lib
@@ -41,30 +40,24 @@ context: |
     - Standalone components, no feature NgModules
     - Signals for local state; RxJS only for async streams
     - Container vs presentational; OnPush on presentational
-    - Repository + stateful service with signals
+    - Repository pattern; no direct HTTP in components
     - Lazy-loaded routes
     - No third-party UI libraries
-    - Tailwind 4 per app, with @source pointing to libs so lib classes are generated
+    - Tailwind 4 in the app, with @source pointing to libs
 
   Design system:
-    - Source of truth: docs/design-system.md and docs/design-tokens/
+    - Source of truth: code in libs/tokens/src/styles/
+    - Documentation: docs/design/design-system.md and docs/design/design-tokens.md
     - Two-layer tokens: palette -> semantic
     - Sidebar 240px, fluid content, 12-column grid, 8px rhythm
     - No glassmorphism, dramatic shadows or hardcoded colors
     - Every uw-ui component has a Storybook story
+    - Component catalog: docs/design/uw-ui-catalog.md
 
-  Auth and tenancy:
-    - Login with tenant + email + password
-    - Access token in memory; refresh token in HttpOnly cookie (target contract)
-    - Guards: auth, tenant, permission/role
-    - Headers: X-Tenant-Id, X-Empresa-Id, X-Empresa-Filial-Id
-    - Never store refresh token in localStorage
-
-  API:
-    - /api/v1, environment.apiUrl
-    - RFC 7807 errors
-    - Repositories per feature, interceptors for auth/context/error
-    - Pagination, filters and sorting explicit
+  Product specification:
+    - openspec/project.md is generic
+    - The "Especificação do Frontend" section is the only product-specific part
+    - It is filled in the first product change
 
   Quality:
     - WCAG 2.1 AA
@@ -76,18 +69,13 @@ rules:
   proposal:
     - Must use grill-me skill
     - Include a "Non-goals" section
-    - Declare "Escopo" with affected apps (erp, platform-admin) and libs (tokens, uw-ui, core, data, i18n)
-    - A change touching both apps must have per-app specs, not one shared spec
-    - Prefix capability names with the app when behavior is product-specific (erp-*, platform-*)
-    - Justify any new lib and reference the ADR that approved it
+    - Declare "Escopo" with affected app (apps/frontend) and libs
+    - Prefix capability names with the app only when behavior is product-specific
     - Identify affected screens, routes and components
-    - Reference the backend endpoints used (if any)
     - Reference the design system and existing uw-ui components
     - State whether the change affects auth, tenancy, i18n or accessibility
-
   specs:
     - Must use gherkin-authoring skill
-    - Never reuse a capability name across apps; shared behavior belongs to a lib-level capability (auth-session, http-errors, i18n)
     - Every requirement must have at least one scenario
     - Use GIVEN/WHEN/THEN in every scenario
     - Include loading, empty, error and success states
@@ -95,35 +83,30 @@ rules:
     - Include accessibility scenarios (keyboard, focus, aria)
     - Include i18n scenarios when user-facing strings are added
     - Reference existing uw-ui components before proposing new ones
-
   design:
     - Must use c4-diagrams skill
-    - Must reference a prototype in docs/design/prototypes/<app>/<screen>/
-    - Must confirm dependency direction (no app -> app, no uw-ui -> core/data)
-    - Map visual elements to docs/design-system.md
+    - Must reference a prototype in docs/design/prototypes/<screen>/ when a screen is involved
+    - Confirm dependency direction (no app -> app, no uw-ui -> core/data/i18n)
+    - Map visual elements to docs/design/design-system.md
     - List uw-ui components used (no third-party UI)
     - Include sequence diagram for cross-layer flows
     - Include responsive and accessibility notes
     - Include error/empty/loading states
-
   adr:
     - Must use architectural-decision-records skill
     - One ADR per significant decision
-    - ADR must contain Context, Decision, Consequences, Alternatives considered
+    - ADR must contain Context, Decision, Consequences and Alternatives considered
     - ADRs are immutable once accepted; supersede with a new ADR
-
   tasks:
     - Break into tasks of at most 2 hours
-    - Group tasks by app/lib when the change spans both
     - Order frontend tasks: types -> repository -> service -> component -> tests -> e2e
     - Include a lint/typecheck/test/build run per affected project
     - Include unit tests for services, repositories and guards
     - Include component tests for containers
     - Include Playwright E2E for critical flows
-    - Include Storybook story for new/changed uw-ui components
-    - Include accessibility review task
+    - Include a Storybook story for new or changed uw-ui components
+    - Include accessibility review
     - Include i18n task when strings are added
-
 apply:
   requires:
     - tasks

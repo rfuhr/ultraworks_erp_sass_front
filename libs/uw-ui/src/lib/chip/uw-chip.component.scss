@@ -1,0 +1,22 @@
+:host { display: inline-block; }
+.uw-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 8px; font-size: 12px; font-family: 'Inter', sans-serif;
+  border-radius: 4px; transition: background 150ms, border-color 150ms;
+  line-height: 1; height: 28px;
+}
+.uw-chip--outlined {
+  border: 1px solid var(--uw-chip-border, #e5e8eb); color: #434654; background: var(--uw-chip-bg, transparent);
+}
+.uw-chip--filled {
+  background: var(--uw-chip-bg, #ebeef1); color: #181c1e; border: 1px solid var(--uw-chip-border, transparent);
+}
+.uw-chip--disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+.uw-chip--sm { font-size: 11px; height: 22px; padding: 2px 6px; }
+.uw-chip__remove {
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none; background: none; cursor: pointer; padding: 0;
+  color: #747686; width: 14px; height: 14px;
+  &:hover { color: #181c1e; }
+  .material-symbols-outlined { font-size: 14px; }
+}

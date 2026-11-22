@@ -1,0 +1,81 @@
+<div
+  class="uw-file-upload"
+  [class.uw-file-upload--drag-over]="isDragOver()"
+  [class.uw-file-upload--disabled]="isDisabled()"
+  [class.uw-file-upload--has-preview]="!empty()"
+  [class.uw-file-upload--image]="isImage()"
+  [class.uw-file-upload--file]="!empty() && !isImage()"
+  [class.uw-file-upload--full]="previewMode() === 'full'"
+  [class.uw-file-upload--ratio]="aspectRatio() !== null"
+  [class.uw-file-upload--sm]="size() === 'sm'"
+  [style.background-image]="previewBg()"
+  [style.aspect-ratio]="aspectRatio()"
+  (click)="onClick()"
+  (keydown)="onKeyDown($event)"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="empty() ? 'Selecionar arquivo' : 'Alterar arquivo'"
+>
+  <input
+    #fileInput
+    type="file"
+    hidden
+    [accept]="accept()"
+    [disabled]="isDisabled()"
+    (change)="onFileSelected($event)"
+  />
+
+  @if (empty()) {
+    <div class="uw-file-upload__placeholder">
+      <div class="uw-file-upload__icon-box">
+        <span class="material-symbols-outlined">upload</span>
+      </div>
+      <div class="uw-file-upload__placeholder-text">
+        <p class="uw-file-upload__text">Clique para enviar ou arraste o arquivo</p>
+        <p class="uw-file-upload__hint">{{ hint() }}</p>
+      </div>
+    </div>
+  } @else if (previewMode() === 'full' && isImage()) {
+    <div class="uw-file-upload__full-overlay">
+      <button
+        class="uw-file-upload__remove"
+        (click)="onRemove($event)"
+        type="button"
+        aria-label="Remover arquivo"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+  } @else {
+    <div class="uw-file-upload__file-info">
+      <div class="uw-file-upload__thumbnail-wrapper">
+        @if (isImage()) {
+          <div
+            class="uw-file-upload__thumbnail"
+            [style.background-image]="'url(' + previewUrl() + ')'"
+          ></div>
+        } @else {
+          <div class="uw-file-upload__file-icon">
+            <span class="material-symbols-outlined">description</span>
+          </div>
+        }
+      </div>
+      <div class="uw-file-upload__file-details">
+        <p class="uw-file-upload__file-name">{{ fileName() }}</p>
+        <p class="uw-file-upload__file-meta">{{ fileType() }} • {{ fileSize() }}</p>
+      </div>
+      <button
+        class="uw-file-upload__remove"
+        (click)="onRemove($event)"
+        type="button"
+        aria-label="Remover arquivo"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+  }
+</div>
+
+@if (errorMessage() ?? error(); as err) {
+  <p class="uw-file-upload__error">{{ err }}</p>
+}

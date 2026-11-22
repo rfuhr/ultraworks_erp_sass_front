@@ -1,0 +1,42 @@
+.uw-input-tag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-tint);
+  border: 1.5px solid color-mix(in srgb, var(--color-primary) 12%, transparent);
+  min-height: 2.5rem;
+  transition: border-color 150ms ease;
+
+  &:focus-within {
+    border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  }
+
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &__input {
+    flex: 1;
+    min-width: 140px;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: var(--font-family-body);
+    font-size: 0.8125rem;
+    color: var(--color-on-surface);
+    padding: 0.25rem 0;
+
+    &::placeholder {
+      color: var(--color-on-surface-variant);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+}

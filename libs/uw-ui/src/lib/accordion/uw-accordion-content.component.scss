@@ -1,0 +1,16 @@
+.uw-accordion-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 250ms ease;
+}
+
+.uw-accordion-content--expanded .uw-accordion-content {
+  max-height: 9999px;
+}
+
+.uw-accordion-content__inner {
+  padding: 0 1.25rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-on-surface-variant);
+}

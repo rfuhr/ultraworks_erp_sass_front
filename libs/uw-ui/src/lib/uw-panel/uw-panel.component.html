@@ -1,0 +1,22 @@
+<div [class]="panelClass()" [style.background-color]="customColor()">
+  @if (hasHeader()) {
+    <div class="uw-panel__header" [style.background-color]="headerBgColor()">
+      @if (icon()) {
+        <span class="material-symbols-outlined uw-panel__icon">{{ icon() }}</span>
+      }
+      <ng-content select="[uw-panel-header]">
+        @if (title()) {
+          <p class="uw-panel__title">{{ title() }}</p>
+        }
+      </ng-content>
+    </div>
+  }
+  <div class="uw-panel__body">
+    <ng-content select="[uw-panel-body]"></ng-content>
+  </div>
+  @if (footerDirective()) {
+    <div class="uw-panel__footer">
+      <ng-content select="[uwPanelFooter]"></ng-content>
+    </div>
+  }
+</div>

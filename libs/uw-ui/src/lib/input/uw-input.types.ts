@@ -1,0 +1,16 @@
+export type UwInputType =
+  | 'text'
+  | 'tel'
+  | 'number'
+  | 'password'
+  | 'cpf'
+  | 'cnpj'
+  | 'valor'
+  | 'cep'
+  | 'data'
+  | 'dataHora'
+  | 'decimal'
+  | 'telefone'
+  | 'celular'
+  | 'cartaoValidade'
+  | 'hora';

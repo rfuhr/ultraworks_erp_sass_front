@@ -1,0 +1,112 @@
+.uw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 64px;
+  padding: 0 20px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+
+.uw-header__start,
+.uw-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.uw-header__title {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.uw-header__icon-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-on-surface-variant);
+  cursor: pointer;
+}
+
+.uw-header__icon-button:hover {
+  background: var(--color-surface-container);
+}
+
+.uw-header__icon-button:focus-visible,
+.uw-header__profile:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.uw-header__badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--color-error);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uw-header__profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  padding: 4px 6px;
+  cursor: pointer;
+  color: var(--color-on-surface);
+}
+
+.uw-header__profile:hover {
+  background: var(--color-surface-container);
+}
+
+.uw-header__user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  font-size: 12px;
+}
+
+.uw-header__user strong,
+.uw-header__user small {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.uw-header__user small {
+  color: var(--color-on-surface-variant);
+}
+
+@media (max-width: 720px) {
+  .uw-header__user {
+    display: none;
+  }
+}

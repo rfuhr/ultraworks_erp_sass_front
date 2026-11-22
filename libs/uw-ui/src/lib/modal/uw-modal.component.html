@@ -1,0 +1,29 @@
+@if (open()) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div
+      class="modal-container"
+      [ngClass]="'modal-' + size()"
+      [style.width]="width() || null"
+      cdkTrapFocus
+      cdkTrapFocusAutoCapture
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="title() ? 'modal-title' : null"
+    >
+      <div class="modal-header">
+        <h2 id="modal-title">{{ title() }}</h2>
+        @if (showCloseButton()) {
+          <button class="modal-close" (click)="close.emit()" type="button">✕</button>
+        }
+      </div>
+      <div class="modal-body">
+        <ng-content></ng-content>
+      </div>
+      @if (footer) {
+        <div class="modal-footer">
+          <ng-container [ngTemplateOutlet]="footer"></ng-container>
+        </div>
+      }
+    </div>
+  </div>
+}

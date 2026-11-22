@@ -1,0 +1,66 @@
+:host { display: inline-flex; }
+
+.uw-drawer-header--help {
+  background: #ffedd5;
+  color: #c2410c;
+  border-radius: 12px 0 0 0;
+}
+
+.uw-drawer-header--help .drawer-title {
+  color: #c2410c;
+}
+
+.uw-drawer-header--help .drawer-close {
+  color: rgba(194, 65, 12, 0.6);
+
+  &:hover { color: #c2410c; }
+}
+
+.uw-help__loading,
+.uw-help__empty {
+  color: #747686;
+  font-size: 14px;
+  padding: 24px;
+  text-align: center;
+}
+
+.uw-help__section {
+  margin-bottom: 24px;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.uw-help__section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #181c1e;
+  margin: 0 0 8px;
+}
+
+.uw-help__section-body {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #434654;
+  margin: 0 0 8px;
+}
+
+.uw-help__rules {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.uw-help__rule {
+  position: relative;
+  padding-left: 20px;
+  font-size: 13px;
+  color: #ba1a1a;
+  line-height: 1.5;
+
+  &::before {
+    content: '📌';
+    position: absolute;
+    left: 0;
+    font-size: 12px;
+  }
+}

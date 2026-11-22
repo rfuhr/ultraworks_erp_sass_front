@@ -1,0 +1,97 @@
+uw-card {
+  display: block;
+}
+
+.uw-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  padding: 0.5rem 1rem;
+  background-color: var(--color-surface-bright);
+  transition: background-color 150ms, box-shadow 150ms, transform 200ms;
+  overflow: hidden;
+
+  &--outlined {
+    background-color: var(--color-surface-tint);
+    border: 1.5px solid color-mix(in srgb, var(--color-primary) 15%, transparent);
+    box-shadow: none;
+  }
+
+  &--flat {
+    border: 1px solid transparent;
+    box-shadow: none;
+  }
+
+  &--hoverable {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &--has-stripe {
+    padding-top: calc(1.5rem + 3px);
+  }
+
+  &__stripe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    pointer-events: none;
+
+    &--primary {
+      background: linear-gradient(90deg, var(--color-violet-700), var(--color-violet-500));
+    }
+
+    &--secondary {
+      background: linear-gradient(90deg, var(--color-teal-700), var(--color-teal-500));
+    }
+
+    &--success {
+      background: linear-gradient(90deg, var(--color-emerald-700), var(--color-emerald-500));
+    }
+
+    &--warning {
+      background: linear-gradient(90deg, var(--color-amber-600), var(--color-amber-400));
+    }
+
+    &--error {
+      background: linear-gradient(90deg, var(--color-red-700), var(--color-red-500));
+    }
+
+    &--info {
+      background: linear-gradient(90deg, var(--color-sky-600), var(--color-sky-400));
+    }
+  }
+
+  &__header {
+    margin-bottom: 1rem;
+  }
+
+  &__body {
+    min-height: 0;
+  }
+
+  &__divider {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-primary) 7%, transparent);
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+  }
+}
+
+:root {
+  --uw-card-bg-primary: var(--color-indigo-50);
+  --uw-card-bg-secondary: var(--color-violet-50);
+  --uw-card-bg-success: var(--color-emerald-50);
+  --uw-card-bg-warning: var(--color-amber-50);
+  --uw-card-bg-error: var(--color-red-50);
+  --uw-card-bg-info: var(--color-blue-50);
+}

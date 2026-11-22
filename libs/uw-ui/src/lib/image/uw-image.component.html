@@ -1,0 +1,21 @@
+<div class="image-wrapper" [style.width]="width()" [style.height]="height()">
+  @if (state() === 'loading') {
+    <div class="image-skeleton" [style.border-radius]="borderRadius() || '12px'"></div>
+  }
+  @if (state() === 'loaded' || state() === 'loading') {
+    <img
+      [src]="src()" [alt]="alt()"
+      [class.image-hidden]="state() === 'loading'"
+      [style.object-fit]="objectFit()" [style.border-radius]="borderRadius() || '12px'"
+      [attr.loading]="lazy() ? 'lazy' : 'eager'"
+      (load)="onLoad()" (error)="onError()"
+      class="image-img"
+    />
+  }
+  @if (state() === 'error') {
+    <div class="image-fallback" [style.border-radius]="borderRadius() || '12px'">
+      <span class="material-symbols-outlined image-fallback-icon">broken_image</span>
+      <span class="image-fallback-text">Imagem não disponível</span>
+    </div>
+  }
+</div>

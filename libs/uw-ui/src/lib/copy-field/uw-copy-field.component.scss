@@ -1,0 +1,57 @@
+.uw-copy-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__label {
+    font-family: var(--font-family-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-on-surface-variant);
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-outline-variant);
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+
+  &__value {
+    flex: 1;
+    font-family: var(--font-family-mono);
+    font-size: 0.875rem;
+    color: var(--color-on-surface);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: all;
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--color-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+  }
+}

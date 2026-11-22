@@ -1,0 +1,19 @@
+<div [class]="cardClass()" [style]="bgStyle()">
+  @if (stripe() !== 'none') {
+    <div [class]="stripeClass()"></div>
+  }
+  @if (hasHeader()) {
+    <div class="uw-card__header">
+      <ng-content select="[uwCardHeader]"></ng-content>
+    </div>
+  }
+  <div class="uw-card__body">
+    <ng-content></ng-content>
+  </div>
+  @if (hasFooter()) {
+    <div class="uw-card__divider"></div>
+    <div class="uw-card__footer">
+      <ng-content select="[uwCardFooter]"></ng-content>
+    </div>
+  }
+</div>

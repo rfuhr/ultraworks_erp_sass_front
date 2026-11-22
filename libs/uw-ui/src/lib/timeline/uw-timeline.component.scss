@@ -1,0 +1,5 @@
+:host { display: block; }
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: #e5e8eb; }
+.timeline--centered { padding-left: 0; }
+.timeline--centered::before { left: 50%; transform: translateX(-50%); }

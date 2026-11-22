@@ -1,0 +1,60 @@
+<div class="uw-pagination">
+  <p class="uw-pagination__info">
+    Exibindo
+    <span class="uw-pagination__highlight">{{ startItem() }}–{{ endItem() }}</span>
+    de
+    <span class="uw-pagination__highlight">{{ totalElements() }}</span>
+    {{ entityLabel() }}
+  </p>
+  <div class="uw-pagination__controls">
+    <button
+      class="uw-pagination__btn uw-pagination__btn--edge"
+      title="Primeira página"
+      [class.uw-pagination__btn--disabled]="page() === 0"
+      (click)="onPageChange(0)"
+      [disabled]="page() === 0"
+    >
+      <span class="material-symbols-outlined">first_page</span>
+    </button>
+
+    <button
+      class="uw-pagination__btn uw-pagination__btn--edge"
+      title="Página anterior"
+      [class.uw-pagination__btn--disabled]="page() === 0"
+      (click)="onPageChange(page() - 1)"
+      [disabled]="page() === 0"
+    >
+      <span class="material-symbols-outlined">keyboard_arrow_left</span>
+    </button>
+
+    @for (p of pages(); track p) {
+      <button
+        class="uw-pagination__page"
+        [class.uw-pagination__page--active]="page() === p"
+        (click)="onPageChange(p)"
+      >
+        {{ p + 1 }}
+      </button>
+    }
+
+    <button
+      class="uw-pagination__btn uw-pagination__btn--edge"
+      title="Próxima página"
+      [class.uw-pagination__btn--disabled]="page() >= totalPages() - 1"
+      (click)="onPageChange(page() + 1)"
+      [disabled]="page() >= totalPages() - 1"
+    >
+      <span class="material-symbols-outlined">keyboard_arrow_right</span>
+    </button>
+
+    <button
+      class="uw-pagination__btn uw-pagination__btn--edge"
+      title="Última página"
+      [class.uw-pagination__btn--disabled]="page() >= totalPages() - 1"
+      (click)="onPageChange(totalPages() - 1)"
+      [disabled]="page() >= totalPages() - 1"
+    >
+      <span class="material-symbols-outlined">last_page</span>
+    </button>
+  </div>
+</div>

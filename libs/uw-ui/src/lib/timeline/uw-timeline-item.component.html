@@ -1,0 +1,17 @@
+<div class="timeline-item" [class.timeline-item--left]="side() === 'left'" [class.timeline-item--right]="side() === 'right'" role="listitem">
+  <div class="timeline-marker" [style.border-color]="color()" [style.background]="color()">
+    @if (icon()) {
+      <span class="material-symbols-outlined timeline-marker-icon">{{ icon() }}</span>
+    }
+  </div>
+  <div class="timeline-content">
+    <h4 class="timeline-title">{{ title() }}</h4>
+    @if (description()) {
+      <p class="timeline-description">{{ description() }}</p>
+    }
+    @if (timestamp()) {
+      <span class="timeline-timestamp">{{ timestamp() }}</span>
+    }
+    <ng-content />
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div
+  class="slider-container"
+  [class.slider-disabled]="disabled()"
+  #trackEl
+  (pointerdown)="onPointerDown($event)"
+>
+  <div class="slider-track">
+    <div class="slider-track-fill" [style.left]="fillLeft()" [style.width]="fillWidth()"></div>
+  </div>
+  @if (range()) {
+    <div
+      class="slider-handle"
+      [style.left]="handleLeftMin()"
+      (pointerdown)="onHandlePointerDown($event, 'min')"
+      role="slider"
+      [attr.aria-valuemin]="min()"
+      [attr.aria-valuemax]="max()"
+      [attr.aria-valuenow]="rangeValue()[0]"
+      tabindex="0"
+    ></div>
+    <div
+      class="slider-handle"
+      [style.left]="handleLeftMax()"
+      (pointerdown)="onHandlePointerDown($event, 'max')"
+      role="slider"
+      [attr.aria-valuemin]="min()"
+      [attr.aria-valuemax]="max()"
+      [attr.aria-valuenow]="rangeValue()[1]"
+      tabindex="0"
+    ></div>
+  } @else {
+    <div
+      class="slider-handle"
+      [style.left]="handleLeft()"
+      (pointerdown)="onHandlePointerDown($event, 'single')"
+      role="slider"
+      [attr.aria-valuemin]="min()"
+      [attr.aria-valuemax]="max()"
+      [attr.aria-valuenow]="singleValue()"
+      tabindex="0"
+    ></div>
+  }
+</div>

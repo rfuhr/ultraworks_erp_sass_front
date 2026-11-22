@@ -1,0 +1,29 @@
+<div
+  class="toggle-card"
+  [class.toggle-card--checked]="displayValue()"
+  [class.toggle-card--disabled]="isDisabled()"
+  [class.toggle-card--clickable-card]="clickableArea() === 'card'"
+  [class.toggle-card--clickable-toggle]="clickableArea() === 'toggle'"
+  [class.toggle-card--variant-primary]="variant() === 'primary'"
+  [class.toggle-card--variant-success]="variant() === 'success'"
+  [class.toggle-card--variant-warning]="variant() === 'warning'"
+  [class.toggle-card--variant-error]="variant() === 'error'"
+  [class.toggle-card--variant-info]="variant() === 'info'"
+  [style.--toggle-card-opacity]="opacity() / 100"
+  (click)="clickableArea() === 'card' && toggle()"
+>
+  <div class="toggle-card__icon">
+    <uw-icon [name]="icon()" size="md" />
+  </div>
+  <div class="toggle-card__content">
+    <span class="toggle-card__label">{{ label() }}</span>
+    <span class="toggle-card__description">{{ description() }}</span>
+  </div>
+  <div
+    class="toggle-card__switch"
+    [class.toggle-card__switch--checked]="displayValue()"
+    (click)="toggle(); $event.stopPropagation()"
+  >
+    <div class="toggle-card__thumb"></div>
+  </div>
+</div>

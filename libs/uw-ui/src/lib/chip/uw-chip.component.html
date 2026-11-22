@@ -1,0 +1,11 @@
+<span class="{{ chipClasses() }}" [class.uw-chip--removable]="removable()"
+  [style.--uw-chip-bg]="color() ? 'var(' + color() + ')' : null"
+  [style.--uw-chip-border]="color() ? 'var(' + color() + ')' : null"
+  [style.color]="textColor() || null">
+  {{ label() }}
+  @if (removable()) {
+    <button class="uw-chip__remove" (click)="onRemove($event)" [disabled]="disabled()" type="button">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  }
+</span>

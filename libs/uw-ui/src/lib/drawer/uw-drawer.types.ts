@@ -1,0 +1,1 @@
+export type UwDrawerSize = 'sm' | 'md' | 'lg' | 'lg-wide' | 'xl';

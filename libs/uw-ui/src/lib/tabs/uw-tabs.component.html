@@ -1,0 +1,21 @@
+<div class="uw-tabs">
+  @for (tab of tabs(); track tab.value) {
+    <button
+      type="button"
+      class="uw-tabs__tab"
+      [class.uw-tabs__tab--active]="tab.value === activeTab()"
+      (click)="selectTab(tab.value)"
+    >
+      @if (tab.icon) {
+        <uw-icon [name]="tab.icon" size="sm" />
+      }
+      <span class="uw-tabs__label">{{ tab.label }}</span>
+      @if (tab.badge != null) {
+        <span class="uw-tabs__badge">{{ tab.badge }}</span>
+      }
+      @if (tab.value === activeTab()) {
+        <div class="uw-tabs__indicator"></div>
+      }
+    </button>
+  }
+</div>

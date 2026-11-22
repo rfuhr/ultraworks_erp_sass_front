@@ -1,0 +1,146 @@
+<div class="uw-select__wrapper">
+  @if (label()) {
+    <label class="uw-select__label">
+    {{ label() }}
+    @if (required()) {
+      <span class="uw-select__required-star">*</span>
+    }
+  </label>
+  }
+
+  <div class="uw-select__control" [class.uw-select__control--error]="error()">
+    <button
+      class="uw-select__trigger"
+      [class.uw-select__trigger--open]="isOpen()"
+      [class.uw-select__trigger--has-value]="hasValue()"
+      [class.uw-select__trigger--error]="error()"
+      [disabled]="isDisabled()"
+      (click)="toggleDropdown()"
+      (keydown)="onKeydown($event)"
+      (blur)="onTriggerBlur()"
+      type="button"
+      #triggerEl
+      cdkOverlayOrigin
+      #trigger="cdkOverlayOrigin"
+    >
+      <span class="uw-select__trigger-text">
+        @if (hasValue()) {
+          {{ selectedLabel() }}
+        } @else {
+          {{ placeholder() }}
+        }
+      </span>
+    </button>
+    @if (!isDisabled()) {
+    <span class="uw-select__chevron material-symbols-outlined" aria-hidden="true">expand_more</span>
+    }
+    @if (clearable() && hasValue() && !isDisabled()) {
+      <button class="uw-select__clear" (click)="onClear($event)" aria-label="Limpar seleção" type="button">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    }
+  </div>
+
+  @if (error(); as errorMsg) {
+    <p class="uw-select__error">{{ errorMsg }}</p>
+  }
+</div>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen()"
+  [cdkConnectedOverlayPositions]="overlayPositions"
+  (overlayOutsideClick)="closeDropdown()"
+  (detach)="closeDropdown()"
+  cdkConnectedOverlayHasBackdrop
+  cdkConnectedOverlayBackdropClass="uw-select__backdrop"
+  [cdkConnectedOverlayWidth]="triggerWidth()"
+  [cdkConnectedOverlayMinWidth]="triggerWidth()"
+>
+  <div class="uw-select__panel" #panelEl>
+    <!-- Header: search -->
+    <div class="uw-select__header">
+      <div class="uw-select__search-wrapper">
+        <input
+          #searchInput
+          class="uw-select__search-input"
+          type="text"
+          [ngModel]="valorFiltro()"
+          (ngModelChange)="onSearchInput($event)"
+          (keyup.enter)="pesquisar()"
+          placeholder="Digite para pesquisar..."
+          autocomplete="off"
+        />
+        <span class="uw-select__search-icon material-symbols-outlined" (click)="pesquisar()" style="cursor: pointer;">search</span>
+      </div>
+      @if (filtersSearch().length > 1) {
+        <div class="uw-select__filter-row">
+          <span class="uw-select__filter-label">Pesquisando por:</span>
+          <div class="uw-select__filter-toggle">
+            @for (f of filtersSearch(); track f.field) {
+              <button
+                class="uw-select__filter-btn"
+                [class.uw-select__filter-btn--active]="f.labelFilter === filterSelectedLabel()"
+                (click)="onFilterFieldChange(f.labelFilter)"
+                type="button"
+              >
+                {{ f.labelFilter }}
+              </button>
+            }
+          </div>
+        </div>
+      } @else if (filtersSearch().length === 1) {
+        <div class="uw-select__filter-row">
+          <span class="uw-select__filter-label">Pesquisando por: {{ filterSearchAtivo().labelFilter }}</span>
+        </div>
+      }
+    </div>
+
+    <!-- Options -->
+    @if (loading() && !loadingMore()) {
+      <div class="uw-select__loading">
+        <div class="uw-select__spinner"></div>
+        <span>Carregando...</span>
+      </div>
+    } @else if (displayRegistros().length === 0 && !loadingMore()) {
+      <div class="uw-select__empty">
+        <span class="material-symbols-outlined">search_off</span>
+        Nenhum resultado encontrado
+      </div>
+    }
+
+    <cdk-virtual-scroll-viewport
+      #optionsEl
+      [itemSize]="36"
+      [style.height]="optionsHeight()"
+      class="uw-select__options"
+      [class.uw-select__options--hidden]="(loading() && !loadingMore()) || (displayRegistros().length === 0 && !loadingMore())"
+      (scroll)="onScrolled()"
+    >
+      <button
+        *cdkVirtualFor="let item of displayRegistros(); trackBy: trackByValue; let index = index"
+        class="uw-select__option"
+        [class.uw-select__option--selected]="item[optionValue()] === value"
+        [class.uw-select__option--highlighted]="index === highlightedIndex()"
+        (click)="onSelect(item)"
+        type="button"
+      >
+        <span class="uw-select__option-check material-symbols-outlined">check</span>
+        <span class="uw-select__option-label">{{ truncate(item[optionLabel()], maxSizeOptions()) }}</span>
+      </button>
+    </cdk-virtual-scroll-viewport>
+
+    @if (loadingMore()) {
+      <div class="uw-select__loading-more">
+        <div class="uw-select__spinner"></div>
+        <span>Carregando...</span>
+      </div>
+    }
+
+    <!-- Footer -->
+    <div class="uw-select__footer">
+      <span class="uw-select__total">{{ totalLabel() }}</span>
+    </div>
+  </div>
+</ng-template>
