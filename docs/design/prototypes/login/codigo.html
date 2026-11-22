@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Protótipo — Login</title>
+    <style>
+      :root {
+        --surface: #ffffff;
+        --surface-low: #f6f7fb;
+        --surface-container: #f1f0f9;
+        --on-surface: #0f0e1a;
+        --on-surface-variant: #5f5d78;
+        --outline: #e5e8eb;
+        --primary: #6c47ff;
+        --on-primary: #ffffff;
+        --error: #e53e3e;
+        --info-bg: #eef2ff;
+        --info-fg: #3730a3;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --font-display: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+        --font-body: 'Inter', 'Segoe UI', sans-serif;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: var(--surface-low);
+        color: var(--on-surface);
+        font-family: var(--font-body);
+      }
+      .card {
+        width: 100%;
+        max-width: 420px;
+        padding: 32px;
+        background: var(--surface);
+        border: 1px solid var(--outline);
+        border-radius: var(--radius-lg);
+      }
+      .brand { text-align: center; margin-bottom: 24px; }
+      .brand__mark {
+        width: 48px; height: 48px; margin: 0 auto 12px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(135deg, #6c47ff, #3b82f6);
+      }
+      .brand__title { margin: 0; font-family: var(--font-display); font-size: 22px; }
+      .brand__subtitle { margin: 4px 0 0; color: var(--on-surface-variant); font-size: 13px; }
+      .alert {
+        display: flex; gap: 8px; align-items: flex-start;
+        padding: 12px 14px; margin-bottom: 20px;
+        border-radius: var(--radius-md); font-size: 13px; line-height: 1.45;
+      }
+      .alert--info { background: var(--info-bg); color: var(--info-fg); }
+      .alert--error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+      .field { margin-bottom: 16px; }
+      .field__label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
+      .field__input {
+        width: 100%; padding: 10px 12px;
+        border: 1.5px solid var(--outline); border-radius: var(--radius-md);
+        background: var(--surface-low); font: inherit; font-size: 14px;
+      }
+      .field__input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(108, 71, 255, .18); }
+      .field__hint { margin: 6px 0 0; font-size: 12px; color: var(--on-surface-variant); }
+      .field__error { margin: 6px 0 0; font-size: 12px; color: var(--error); }
+      .actions { margin-top: 24px; }
+      .button {
+        width: 100%; padding: 12px 16px; border: 0; border-radius: var(--radius-md);
+        background: var(--primary); color: var(--on-primary);
+        font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+      }
+      .button:focus-visible { outline: 2px solid var(--on-surface); outline-offset: 2px; }
+      .footer { margin-top: 16px; text-align: center; font-size: 12px; color: var(--on-surface-variant); }
+      .state-note { max-width: 420px; margin: 16px auto 0; font-size: 12px; color: var(--on-surface-variant); text-align: center; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="card" aria-labelledby="login-title">
+        <div class="brand">
+          <div class="brand__mark" role="img" aria-label="Marca do Frontend Template"></div>
+          <h1 class="brand__title" id="login-title">Frontend Template</h1>
+          <p class="brand__subtitle">Acesse sua conta de demonstração</p>
+        </div>
+
+        <div class="alert alert--info" role="note">
+          <span aria-hidden="true">ⓘ</span>
+          <span>Credenciais de demonstração: <strong>demo@frontend.dev</strong> / <strong>demo1234</strong></span>
+        </div>
+
+        <form>
+          <div class="field">
+            <label class="field__label" for="email">E-mail</label>
+            <input class="field__input" id="email" type="email" value="demo@frontend.dev" autocomplete="email" />
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="password">Senha</label>
+            <input class="field__input" id="password" type="password" value="demo1234" autocomplete="current-password" />
+            <p class="field__hint">Mínimo de 6 caracteres.</p>
+          </div>
+
+          <div class="actions">
+            <button class="button" type="submit">Entrar</button>
+          </div>
+        </form>
+
+        <p class="footer">Dados mockados — nenhuma chamada ao backend</p>
+      </section>
+
+      <p class="state-note">
+        Estados previstos: loading (botão desabilitado + spinner), erro de validação, erro de credenciais,
+        sucesso (redireciona para o shell) e foco no primeiro campo inválido.
+      </p>
+    </main>
+  </body>
+</html>

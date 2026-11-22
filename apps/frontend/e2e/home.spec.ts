@@ -1,28 +1,30 @@
 import { expect, test } from '@playwright/test';
+import { loginAsDemo, openSidebarOnMobile } from './helpers';
 
-test.describe('Página inicial', () => {
-  test('carrega o conteúdo de exemplo', async ({ page }) => {
-    await page.goto('/');
+test.describe('Home do shell', () => {
+  test('exibe os indicadores e atividades mockados', async ({ page }) => {
+    await loginAsDemo(page);
 
-    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    await expect(page.getByText('Design system importado')).toBeVisible({
-      timeout: 10_000,
-    });
+    await expect(page.getByText('Projetos ativos')).toBeVisible();
+    await expect(page.getByText('Atividades recentes')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Relatório mensal aprovado' })).toBeVisible();
+    await expect(page.getByText('Progresso do trimestre')).toBeVisible();
   });
 
-  test('exibe erro e permite tentar novamente', async ({ page }) => {
-    await page.goto('/');
+  test('informa que itens de menu sem rota são demonstrativos', async ({ page }) => {
+    await loginAsDemo(page);
 
-    await page.getByRole('button', { name: /Simular erro/i }).click();
-    await expect(page.getByRole('alert')).toBeVisible();
-    await expect(page.getByRole('button', { name: /Tentar novamente/i })).toBeVisible();
+    await openSidebarOnMobile(page);
+    await page.getByRole('button', { name: 'Relatórios' }).click();
+
+    await expect(page.getByText('Esta tela não faz parte da demonstração.')).toBeVisible();
+    await expect(page).toHaveURL('/');
   });
 
-  test('permite navegação por teclado', async ({ page }) => {
-    await page.goto('/');
+  test('exibe o breadcrumb e o usuário autenticado', async ({ page }) => {
+    await loginAsDemo(page);
 
-    await page.keyboard.press('Tab');
-    const focused = page.locator(':focus');
-    await expect(focused).toBeVisible();
+    await expect(page.getByText('Ana Souza').first()).toBeVisible();
+    await expect(page.getByText('Frontend Template').first()).toBeVisible();
   });
 });

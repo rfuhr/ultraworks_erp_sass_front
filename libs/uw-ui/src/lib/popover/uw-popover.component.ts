@@ -45,7 +45,7 @@ export class UwPopoverComponent {
         .position()
         .flexibleConnectedTo(triggerEl)
         .withPositions(this.getPositions()),
-      scrollStrategy: this.overlay.scrollStrategies.close(),
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
       disposeOnNavigation: true,
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',

@@ -26,8 +26,17 @@
       [title]="title()"
       [user]="user()"
       [unreadCount]="unreadCount()"
+      [notifications]="notifications()"
+      [notificationsLoading]="notificationsLoading()"
+      [notificationsError]="notificationsError()"
+      [notificationLabels]="notificationLabels()"
+      [profileItems]="profileItems()"
       (toggleSidebar)="toggleSidebar()"
       (notificationsClick)="notificationsClick.emit()"
+      (notificationItemClick)="notificationItemClick.emit($event)"
+      (notificationsRetry)="notificationsRetry.emit()"
+      (notificationsShowAll)="notificationsShowAll.emit()"
+      (profileItemClick)="profileItemClick.emit($event)"
       (profileClick)="closeMobile()"
     />
 

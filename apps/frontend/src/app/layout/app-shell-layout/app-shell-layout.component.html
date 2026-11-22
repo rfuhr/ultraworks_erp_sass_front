@@ -1,0 +1,20 @@
+<uw-admin-layout
+  [menuItems]="menuItems()"
+  [bottomItems]="bottomItems()"
+  [breadcrumb]="breadcrumb()"
+  [user]="layoutUser()"
+  [unreadCount]="unreadCount()"
+  [notifications]="notificationItems()"
+  [notificationLabels]="notificationLabels()"
+  [profileItems]="profileItems()"
+  [title]="pageTitle()"
+  [sidebarTitle]="'app.title' | translate"
+  [(collapsed)]="collapsed"
+  (navigate)="onNavigate($event)"
+  (logout)="onLogout()"
+  (notificationItemClick)="onNotificationItem($event)"
+  (notificationsShowAll)="onShowAllNotifications()"
+  (profileItemClick)="onProfileItem($event)"
+>
+  <router-outlet />
+</uw-admin-layout>

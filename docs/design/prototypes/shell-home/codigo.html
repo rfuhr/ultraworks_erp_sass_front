@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Protótipo — Shell Home</title>
+    <style>
+      :root {
+        --sidebar: #1a1535;
+        --sidebar-fg: #e2e0f0;
+        --sidebar-muted: #8a8aaa;
+        --sidebar-accent: #251e4a;
+        --surface: #ffffff;
+        --surface-low: #f6f7fb;
+        --surface-container: #f1f0f9;
+        --on-surface: #0f0e1a;
+        --on-surface-variant: #5f5d78;
+        --outline: #e5e8eb;
+        --primary: #6c47ff;
+        --on-primary: #ffffff;
+        --success: #15803d;
+        --error: #e53e3e;
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --font-display: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+        --font-body: 'Inter', 'Segoe UI', sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--surface-low); color: var(--on-surface); font-family: var(--font-body); }
+      .layout { display: flex; min-height: 100vh; }
+
+      .sidebar {
+        width: 240px; flex: 0 0 auto; display: flex; flex-direction: column;
+        background: var(--sidebar); color: var(--sidebar-fg); border-right: 1px solid rgba(255,255,255,.07);
+      }
+      .sidebar__brand { display: flex; align-items: center; gap: 10px; padding: 16px 12px; border-bottom: 1px solid rgba(255,255,255,.07); }
+      .sidebar__mark { width: 32px; height: 32px; border-radius: var(--radius-md); background: var(--primary); }
+      .sidebar__title { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+      .sidebar__nav { flex: 1; padding: 12px 8px; }
+      .sidebar__item {
+        width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+        border: 1px solid transparent; border-radius: var(--radius-md);
+        background: transparent; color: var(--sidebar-muted); font: inherit; font-size: 13px; text-align: left;
+      }
+      .sidebar__item--active { background: linear-gradient(135deg, rgba(108,71,255,.3), rgba(59,130,246,.18)); border-color: rgba(108,71,255,.35); color: #f2f0ff; font-weight: 600; }
+      .sidebar__item + .sidebar__item { margin-top: 2px; }
+      .sidebar__icon { width: 18px; text-align: center; font-size: 14px; }
+      .sidebar__badge { margin-left: auto; padding: 1px 7px; border-radius: 999px; background: var(--primary); color: #fff; font-size: 10px; font-weight: 700; }
+      .sidebar__section { margin: 16px 10px 8px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #c4bfdf; }
+      .sidebar__footer { padding: 12px 8px; border-top: 1px solid rgba(255,255,255,.07); }
+      .sidebar__user { display: flex; align-items: center; gap: 10px; padding: 8px 6px 0; }
+      .avatar { width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: #ddd6fe; color: #4c1d95; font-size: 12px; font-weight: 700; }
+      .sidebar__user-info { display: flex; flex-direction: column; min-width: 0; }
+      .sidebar__user-info small { color: var(--sidebar-muted); }
+
+      .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+      .header {
+        display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        min-height: 64px; padding: 0 20px; background: var(--surface); border-bottom: 1px solid var(--outline);
+      }
+      .header__title { margin: 0; font-family: var(--font-display); font-size: 18px; font-weight: 600; }
+      .header__actions { display: flex; align-items: center; gap: 12px; }
+      .icon-button { position: relative; width: 36px; height: 36px; border: 1px solid transparent; border-radius: var(--radius-md); background: transparent; color: var(--on-surface-variant); font-size: 16px; }
+      .icon-button__badge { position: absolute; top: 0; right: 0; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; background: var(--error); color: #fff; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+      .profile { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border: 1px solid transparent; border-radius: var(--radius-md); }
+      .profile__name { display: flex; flex-direction: column; font-size: 12px; }
+      .profile small { color: var(--on-surface-variant); }
+
+      .subheader { display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 24px; background: #fafafc; border-bottom: 1px solid var(--outline); font-size: 12px; color: var(--on-surface-variant); }
+      .subheader__current { color: var(--on-surface); font-weight: 600; }
+
+      .content { flex: 1; padding: 24px; }
+      .page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+      .page-head h2 { margin: 0; font-family: var(--font-display); font-size: 22px; }
+      .page-head p { margin: 4px 0 0; color: var(--on-surface-variant); font-size: 13px; }
+      .button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 0; border-radius: var(--radius-md); background: var(--primary); color: var(--on-primary); font: inherit; font-size: 13px; font-weight: 600; }
+
+      .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
+      .stat { padding: 16px; background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius-lg); }
+      .stat__top { display: flex; align-items: center; justify-content: space-between; }
+      .stat__icon { width: 36px; height: 36px; border-radius: var(--radius-md); background: #ede9fe; color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; }
+      .stat__delta { font-size: 11px; color: var(--success); font-weight: 600; }
+      .stat__label { margin: 12px 0 2px; font-size: 12px; color: var(--on-surface-variant); }
+      .stat__value { margin: 0; font-family: var(--font-display); font-size: 24px; font-weight: 700; }
+
+      .columns { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; }
+      .card { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius-lg); padding: 20px; }
+      .card__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+      .card__title { margin: 0; font-family: var(--font-display); font-size: 15px; }
+      .link { border: 0; background: transparent; color: var(--primary); font: inherit; font-size: 12px; font-weight: 600; }
+      .activity { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--outline); }
+      .activity:last-child { border-bottom: 0; }
+      .activity__dot { width: 32px; height: 32px; flex: 0 0 auto; border-radius: 50%; background: var(--surface-container); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+      .activity__body { flex: 1; min-width: 0; }
+      .activity__title { margin: 0; font-size: 13px; font-weight: 600; }
+      .activity__meta { margin: 2px 0 0; font-size: 11px; color: var(--on-surface-variant); }
+      .activity__time { font-size: 11px; color: var(--on-surface-variant); white-space: nowrap; }
+
+      .progress { margin-top: 12px; }
+      .progress__row { display: flex; align-items: center; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+      .progress__track { height: 8px; border-radius: 999px; background: var(--surface-container); overflow: hidden; }
+      .progress__bar { height: 100%; border-radius: 999px; background: var(--primary); }
+
+      @media (max-width: 1100px) {
+        .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .columns { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 900px) {
+        .sidebar { position: fixed; inset: 0 auto 0 0; transform: translateX(-100%); }
+        .sidebar--open { transform: translateX(0); }
+        .content { padding: 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar" aria-label="Navegação principal">
+        <div class="sidebar__brand">
+          <div class="sidebar__mark" aria-hidden="true"></div>
+          <span class="sidebar__title">Frontend Template</span>
+        </div>
+
+        <nav class="sidebar__nav">
+          <p class="sidebar__section">Principal</p>
+          <button class="sidebar__item sidebar__item--active" type="button">
+            <span class="sidebar__icon" aria-hidden="true">▣</span>
+            <span>Visão geral</span>
+          </button>
+          <button class="sidebar__item" type="button">
+            <span class="sidebar__icon" aria-hidden="true">▤</span>
+            <span>Relatórios</span>
+            <span class="sidebar__badge">3</span>
+          </button>
+          <button class="sidebar__item" type="button">
+            <span class="sidebar__icon" aria-hidden="true">◉</span>
+            <span>Equipe</span>
+          </button>
+          <p class="sidebar__section">Conta</p>
+          <button class="sidebar__item" type="button">
+            <span class="sidebar__icon" aria-hidden="true">⚙</span>
+            <span>Configurações</span>
+          </button>
+          <button class="sidebar__item" type="button">
+            <span class="sidebar__icon" aria-hidden="true">?</span>
+            <span>Ajuda</span>
+          </button>
+        </nav>
+
+        <div class="sidebar__footer">
+          <div class="sidebar__user">
+            <span class="avatar" aria-hidden="true">AS</span>
+            <span class="sidebar__user-info">
+              <strong>Ana Souza</strong>
+              <small>Administradora</small>
+            </span>
+            <button class="icon-button" type="button" aria-label="Sair" style="color: inherit">⏻</button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="main">
+        <header class="header">
+          <h1 class="header__title">Visão geral</h1>
+          <div class="header__actions">
+            <button class="icon-button" type="button" aria-label="3 notificações não lidas">
+              ♢<span class="icon-button__badge" aria-hidden="true">3</span>
+            </button>
+            <div class="profile">
+              <span class="avatar" aria-hidden="true">AS</span>
+              <span class="profile__name">
+                <strong>Ana Souza</strong>
+                <small>Administradora</small>
+              </span>
+            </div>
+          </div>
+        </header>
+
+        <div class="subheader" aria-label="Breadcrumb">
+          <span>Frontend Template</span>
+          <span aria-hidden="true">/</span>
+          <span class="subheader__current">Visão geral</span>
+        </div>
+
+        <main class="content">
+          <div class="page-head">
+            <div>
+              <h2>Visão geral</h2>
+              <p>Acompanhe os indicadores de demonstração do seu workspace.</p>
+            </div>
+            <button class="button" type="button">＋ Nova atividade</button>
+          </div>
+
+          <section class="stats" aria-label="Indicadores">
+            <article class="stat">
+              <div class="stat__top">
+                <span class="stat__icon" aria-hidden="true">◫</span>
+                <span class="stat__delta">+12%</span>
+              </div>
+              <p class="stat__label">Projetos ativos</p>
+              <p class="stat__value">24</p>
+            </article>
+            <article class="stat">
+              <div class="stat__top">
+                <span class="stat__icon" aria-hidden="true">✓</span>
+                <span class="stat__delta">+8%</span>
+              </div>
+              <p class="stat__label">Tarefas concluídas</p>
+              <p class="stat__value">132</p>
+            </article>
+            <article class="stat">
+              <div class="stat__top">
+                <span class="stat__icon" aria-hidden="true">◉</span>
+                <span class="stat__delta">+2</span>
+              </div>
+              <p class="stat__label">Membros da equipe</p>
+              <p class="stat__value">18</p>
+            </article>
+            <article class="stat">
+              <div class="stat__top">
+                <span class="stat__icon" aria-hidden="true">◷</span>
+                <span class="stat__delta">-4%</span>
+              </div>
+              <p class="stat__label">Tempo médio de resposta</p>
+              <p class="stat__value">2h 15m</p>
+            </article>
+          </section>
+
+          <div class="columns">
+            <section class="card" aria-labelledby="activity-title">
+              <div class="card__head">
+                <h3 class="card__title" id="activity-title">Atividades recentes</h3>
+                <button class="link" type="button">Ver todas</button>
+              </div>
+
+              <div class="activity">
+                <span class="activity__dot" aria-hidden="true">✓</span>
+                <div class="activity__body">
+                  <p class="activity__title">Relatório mensal aprovado</p>
+                  <p class="activity__meta">Marina Lopes · Financeiro</p>
+                </div>
+                <span class="activity__time">há 2 horas</span>
+              </div>
+              <div class="activity">
+                <span class="activity__dot" aria-hidden="true">＋</span>
+                <div class="activity__body">
+                  <p class="activity__title">Novo membro adicionado à equipe</p>
+                  <p class="activity__meta">Carlos Lima · Produto</p>
+                </div>
+                <span class="activity__time">há 5 horas</span>
+              </div>
+              <div class="activity">
+                <span class="activity__dot" aria-hidden="true">↻</span>
+                <div class="activity__body">
+                  <p class="activity__title">Integração de dados atualizada</p>
+                  <p class="activity__meta">Sistema · Automático</p>
+                </div>
+                <span class="activity__time">ontem</span>
+              </div>
+            </section>
+
+            <section class="card" aria-labelledby="progress-title">
+              <div class="card__head">
+                <h3 class="card__title" id="progress-title">Progresso do trimestre</h3>
+                <span class="stat__delta">68%</span>
+              </div>
+
+              <div class="progress">
+                <div class="progress__row"><span>Planejamento</span><strong>100%</strong></div>
+                <div class="progress__track"><div class="progress__bar" style="width: 100%"></div></div>
+              </div>
+              <div class="progress">
+                <div class="progress__row"><span>Execução</span><strong>72%</strong></div>
+                <div class="progress__track"><div class="progress__bar" style="width: 72%"></div></div>
+              </div>
+              <div class="progress">
+                <div class="progress__row"><span>Revisão</span><strong>31%</strong></div>
+                <div class="progress__track"><div class="progress__bar" style="width: 31%"></div></div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

@@ -12,6 +12,7 @@ describe('UwPopoverComponent', () => {
       detach: jest.fn(),
       dispose: jest.fn(),
     };
+    const scrollStrategy = {};
     const overlay = {
       create: jest.fn().mockReturnValue(overlayRef),
       position: jest.fn().mockReturnValue({
@@ -21,6 +22,7 @@ describe('UwPopoverComponent', () => {
       }),
       scrollStrategies: {
         close: jest.fn().mockReturnValue({}),
+        reposition: jest.fn().mockReturnValue(scrollStrategy),
       },
     };
 
@@ -37,6 +39,9 @@ describe('UwPopoverComponent', () => {
     fixture.componentInstance.open(document.createElement('button'));
 
     expect(overlay.create).toHaveBeenCalled();
+    expect(overlay.create).toHaveBeenCalledWith(
+      expect.objectContaining({ scrollStrategy }),
+    );
     expect(overlayRef.attach).toHaveBeenCalled();
     expect(opened).toHaveBeenCalledTimes(1);
   });

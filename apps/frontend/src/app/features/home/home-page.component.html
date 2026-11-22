@@ -1,71 +1,106 @@
-<main class="uw-home" aria-labelledby="home-title">
-  <header class="uw-home__header">
-    <div class="uw-home__topbar">
-      <p class="uw-home__eyebrow">{{ 'home.badge' | translate }}</p>
-      <uw-language-switcher
-        [initialLang]="i18n.currentLanguage()"
-        (languageChange)="changeLanguage($event)"
+<section class="home">
+  <uw-page-header [title]="'home.title' | translate" [description]="'home.subtitle' | translate">
+    <uw-button
+      [label]="'home.actions.new' | translate"
+      icon="add"
+      variant="primary"
+      (clicked)="onDemoAction()"
+    />
+  </uw-page-header>
+
+  <p class="home__announcement" aria-live="polite">
+    {{ ('home.states.' + state()) | translate }}
+  </p>
+
+  @if (state() === 'error') {
+    <div class="home__error" role="alert">
+      <uw-alert variant="danger">{{ 'home.error.description' | translate }}</uw-alert>
+      <uw-button
+        [label]="'home.error.retry' | translate"
+        icon="refresh"
+        variant="secondary"
+        (clicked)="retry()"
       />
     </div>
-    <h1 id="home-title" class="uw-home__title">{{ 'home.title' | translate }}</h1>
-    <p class="uw-home__subtitle">{{ 'home.subtitle' | translate }}</p>
-  </header>
+  } @else {
+    <div class="home__stats">
+      @if (loading()) {
+        @for (item of skeletonItems; track item) {
+          <uw-stat-card [loading]="true" />
+        }
+      } @else {
+        @for (metric of metrics(); track metric.id) {
+          <uw-stat-card
+            [icon]="metric.icon"
+            [label]="metric.labelKey | translate"
+            [value]="metric.value"
+            [delta]="metric.delta"
+            [iconBg]="metric.iconBg"
+            [iconColor]="metric.iconColor"
+            [deltaColor]="metric.deltaPositive ? 'var(--color-success)' : 'var(--color-error)'"
+          />
+        }
+      }
+    </div>
 
-  <section class="uw-home__actions" aria-label="Simulação de estados">
-    <button type="button" class="uw-home__button" (click)="load('success')">
-      {{ 'home.actions.load' | translate }}
-    </button>
-    <button type="button" class="uw-home__button uw-home__button--ghost" (click)="load('empty')">
-      {{ 'home.actions.empty' | translate }}
-    </button>
-    <button type="button" class="uw-home__button uw-home__button--ghost" (click)="load('error')">
-      {{ 'home.actions.error' | translate }}
-    </button>
-  </section>
-
-  <section class="uw-home__panel" aria-live="polite">
-    @switch (state()) {
-      @case ('loading') {
-        <div class="uw-home__status" role="status">
-          <span class="uw-home__spinner" aria-hidden="true"></span>
-          {{ 'home.loading' | translate }}
+    <div class="home__columns">
+      <uw-card>
+        <div uwCardHeader class="home__card-head">
+          <h2 class="home__card-title">{{ 'home.activities.title' | translate }}</h2>
+          <uw-button
+            [label]="'home.activities.viewAll' | translate"
+            variant="text"
+            size="sm"
+            (clicked)="onDemoAction()"
+          />
         </div>
-      }
 
-      @case ('empty') {
-        <div class="uw-home__status uw-home__status--empty">
-          <h2>{{ 'home.empty.title' | translate }}</h2>
-          <p>{{ 'home.empty.description' | translate }}</p>
-          <button type="button" class="uw-home__button" (click)="load('success')">
-            {{ 'home.empty.action' | translate }}
-          </button>
+        @if (loading()) {
+          <uw-skeleton variant="text" [lines]="3" />
+        } @else if (state() === 'empty') {
+          <uw-empty-state
+            icon="inbox"
+            [title]="'home.activities.empty.title' | translate"
+            [description]="'home.activities.empty.description' | translate"
+            [actionLabel]="'home.activities.empty.action' | translate"
+            (action)="load('success')"
+          />
+        } @else {
+          <uw-timeline>
+            @for (activity of activities(); track activity.id) {
+              <uw-timeline-item
+                [title]="activity.titleKey | translate"
+                [description]="activity.metaKey | translate"
+                [timestamp]="activity.timeKey | translate"
+                [icon]="activity.icon"
+                [color]="activity.color"
+              />
+            }
+          </uw-timeline>
+        }
+      </uw-card>
+
+      <uw-card>
+        <div uwCardHeader class="home__card-head">
+          <h2 class="home__card-title">{{ 'home.progress.title' | translate }}</h2>
         </div>
-      }
 
-      @case ('error') {
-        <div class="uw-home__status uw-home__status--error" role="alert">
-          <h2>{{ 'home.error.title' | translate }}</h2>
-          <p>{{ 'home.error.description' | translate }}</p>
-          <button type="button" class="uw-home__button" (click)="load('success')">
-            {{ 'home.error.retry' | translate }}
-          </button>
-        </div>
-      }
-
-      @case ('success') {
-        <ul class="uw-home__list">
-          @for (item of items(); track item.id) {
-            <li class="uw-home__item">
-              <h2>{{ item.titleKey | translate }}</h2>
-              <p>{{ item.descriptionKey | translate }}</p>
-            </li>
-          }
-        </ul>
-      }
-    }
-  </section>
-
-  <footer class="uw-home__footer">
-    <a routerLink="/404">{{ 'home.footer.notFound' | translate }}</a>
-  </footer>
-</main>
+        @if (loading()) {
+          <uw-skeleton variant="text" [lines]="3" />
+        } @else {
+          <div class="home__progress">
+            @for (item of progress(); track item.id) {
+              <div class="home__progress-row">
+                <div class="home__progress-label">
+                  <span>{{ item.labelKey | translate }}</span>
+                  <strong>{{ item.value }}%</strong>
+                </div>
+                <uw-progress-bar [value]="item.value" size="sm" />
+              </div>
+            }
+          </div>
+        }
+      </uw-card>
+    </div>
+  }
+</section>

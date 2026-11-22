@@ -1,0 +1,87 @@
+<main class="login" aria-labelledby="login-title">
+  <div class="login__language">
+    <uw-language-switcher
+      [initialLang]="currentLanguage()"
+      (languageChange)="changeLanguage($event)"
+    />
+  </div>
+
+  <uw-card class="login__card">
+    <div class="login__content">
+      <header class="login__brand">
+        <span class="login__mark" aria-hidden="true"></span>
+        <h1 class="login__title" id="login-title">{{ 'app.title' | translate }}</h1>
+        <p class="login__subtitle">{{ 'login.subtitle' | translate }}</p>
+      </header>
+
+      <div class="login__demo">
+        <uw-alert variant="info">
+          <strong>{{ 'login.demo.title' | translate }}:</strong>
+          {{ credentials.email }} / {{ credentials.password }}
+        </uw-alert>
+      </div>
+
+      <form class="login__form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate data-testid="login-form">
+        @if (errorMessage(); as errorKey) {
+          <div
+            #errorAlert
+            class="login__error"
+            role="alert"
+            aria-live="assertive"
+            tabindex="-1"
+            data-testid="login-error"
+          >
+            <uw-alert variant="danger">{{ errorKey | translate }}</uw-alert>
+          </div>
+        }
+
+        <uw-form-field [label]="'login.email.label' | translate" [required]="true">
+          <uw-input
+            #emailField
+            formControlName="email"
+            type="text"
+            [placeholder]="'login.email.placeholder' | translate"
+            data-testid="login-email"
+          />
+        </uw-form-field>
+        @if (emailError(); as errorKey) {
+          <p class="login__field-error" aria-live="polite">{{ errorKey | translate }}</p>
+        }
+
+        <uw-form-field [label]="'login.password.label' | translate" [required]="true">
+          <uw-input
+            #passwordField
+            formControlName="password"
+            type="password"
+            [placeholder]="'login.password.placeholder' | translate"
+            [hint]="'login.password.hint' | translate"
+            data-testid="login-password"
+          />
+        </uw-form-field>
+        @if (passwordError(); as errorKey) {
+          <p class="login__field-error" aria-live="polite">{{ errorKey | translate }}</p>
+        }
+
+        <div class="login__actions">
+          <uw-button
+            type="submit"
+            variant="primary"
+            icon="login"
+            [fullWidth]="true"
+            [disabled]="loading()"
+            [label]="(loading() ? 'login.submitting' : 'login.submit') | translate"
+            data-testid="login-submit"
+          />
+          @if (loading()) {
+            <div class="login__loading" role="status" aria-live="polite">
+              <uw-spinner size="sm" />
+              <span>{{ 'login.submitting' | translate }}</span>
+            </div>
+          }
+        </div>
+      </form>
+
+      <p class="login__footer">{{ 'login.footer' | translate }}</p>
+    </div>
+  </uw-card>
+</main>

@@ -11,7 +11,13 @@ import type { BreadcrumbItem } from '../breadcrumb/uw-breadcrumb.types';
 import { UwHeaderComponent } from './uw-header.component';
 import { UwSidebarComponent } from './uw-sidebar.component';
 import { UwSubheaderComponent } from './uw-subheader.component';
-import type { UwLayoutUser, UwNavItem } from './uw-admin-layout.types';
+import type {
+  UwLayoutUser,
+  UwNavItem,
+  UwNotificationItem,
+  UwNotificationPanelLabels,
+  UwProfileMenuItem,
+} from './uw-admin-layout.types';
 
 @Component({
   selector: 'uw-admin-layout',
@@ -31,12 +37,22 @@ export class UwAdminLayoutComponent {
   readonly title = input('');
   readonly sidebarTitle = input('Frontend Template');
 
+  readonly notifications = input<readonly UwNotificationItem[]>([]);
+  readonly notificationsLoading = input(false);
+  readonly notificationsError = input(false);
+  readonly notificationLabels = input<UwNotificationPanelLabels | null>(null);
+  readonly profileItems = input<readonly UwProfileMenuItem[]>([]);
+
   readonly collapsed = model(false);
   readonly mobileOpen = signal(false);
 
   readonly navigate = output<string>();
   readonly logout = output<void>();
   readonly notificationsClick = output<void>();
+  readonly notificationItemClick = output<UwNotificationItem>();
+  readonly notificationsRetry = output<void>();
+  readonly notificationsShowAll = output<void>();
+  readonly profileItemClick = output<UwProfileMenuItem>();
 
   toggleSidebar(): void {
     if (typeof window !== 'undefined' && window.matchMedia('(max-width: 900px)').matches) {

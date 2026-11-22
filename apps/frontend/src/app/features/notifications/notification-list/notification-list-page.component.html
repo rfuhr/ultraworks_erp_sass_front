@@ -1,0 +1,56 @@
+<section class="notifications">
+  <uw-page-header
+    [title]="'notifications.title' | translate"
+    [description]="'notifications.description' | translate"
+  >
+    <uw-button
+      [label]="'notifications.markAllRead' | translate"
+      icon="done_all"
+      variant="secondary"
+      [disabled]="unreadCount() === 0"
+      (clicked)="markAllRead()"
+      data-testid="notifications-mark-all"
+    />
+  </uw-page-header>
+
+  <p class="notifications__summary" aria-live="polite">
+    {{ 'notifications.unreadSummary' | translate: { count: unreadCount() } }}
+  </p>
+
+  <uw-card>
+    @if (items().length === 0) {
+      <uw-empty-state
+        icon="notifications_off"
+        [title]="'notifications.empty.title' | translate"
+        [description]="'notifications.empty.description' | translate"
+      />
+    } @else {
+      <ul class="notifications__list" data-testid="notifications-list">
+        @for (item of items(); track item.id) {
+          <li>
+            <button
+              type="button"
+              class="notifications__item"
+              [class.notifications__item--read]="item.read"
+              (click)="open(item.id)"
+              data-testid="notification-item"
+            >
+              <span class="notifications__icon" aria-hidden="true">
+                <uw-icon [name]="item.icon" size="md" />
+              </span>
+              <span class="notifications__body">
+                <strong>{{ item.titleKey | translate }}</strong>
+                <span class="notifications__excerpt">{{ item.bodyKey | translate }}</span>
+                <time>{{ item.timeKey | translate }}</time>
+              </span>
+              @if (!item.read) {
+                <span class="notifications__dot" [attr.aria-label]="'notifications.unread' | translate"></span>
+              }
+              <uw-icon name="chevron_right" size="sm" />
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </uw-card>
+</section>

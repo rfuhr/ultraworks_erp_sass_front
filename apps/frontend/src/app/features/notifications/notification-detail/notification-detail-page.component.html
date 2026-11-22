@@ -1,0 +1,40 @@
+<section class="notification-detail">
+  <uw-button
+    [label]="'notifications.back' | translate"
+    icon="arrow_back"
+    variant="text"
+    (clicked)="back()"
+    data-testid="notification-back"
+  />
+
+  @if (notification(); as item) {
+    <uw-card>
+      <article class="notification-detail__article" data-testid="notification-detail">
+        <header class="notification-detail__head">
+          <span class="notification-detail__icon" aria-hidden="true">
+            <uw-icon [name]="item.icon" size="lg" />
+          </span>
+          <div>
+            <h1 class="notification-detail__title">{{ item.titleKey | translate }}</h1>
+            <time class="notification-detail__time">{{ item.timeKey | translate }}</time>
+          </div>
+        </header>
+
+        <p class="notification-detail__body">{{ item.bodyKey | translate }}</p>
+
+        <p class="notification-detail__hint">{{ 'notifications.readOnly' | translate }}</p>
+      </article>
+    </uw-card>
+  } @else {
+    <uw-card>
+      <uw-empty-state
+        icon="search_off"
+        [title]="'notifications.notFound.title' | translate"
+        [description]="'notifications.notFound.description' | translate"
+        [actionLabel]="'notifications.back' | translate"
+        actionIcon="arrow_back"
+        (action)="back()"
+      />
+    </uw-card>
+  }
+</section>

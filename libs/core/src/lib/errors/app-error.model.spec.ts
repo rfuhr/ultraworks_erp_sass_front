@@ -33,4 +33,21 @@ describe('toAppError', () => {
     expect(error.code).toBe('UNKNOWN_ERROR');
     expect(error.message).toBe('falha inesperada');
   });
+
+  it('deve gerar código HTTP e mensagem padrão quando o corpo não traz detalhes', () => {
+    const error = toAppError({ status: 500, message: '', error: null });
+
+    expect(error.code).toBe('HTTP_500');
+    expect(error.message).toBe('Não foi possível concluir a operação.');
+    expect(error.traceId).toBeUndefined();
+    expect(error.details).toBeUndefined();
+  });
+
+  it('deve usar mensagem padrão para valor desconhecido que não é Error', () => {
+    const error = toAppError('falha');
+
+    expect(error.status).toBe(0);
+    expect(error.code).toBe('UNKNOWN_ERROR');
+    expect(error.message).toBe('Erro inesperado.');
+  });
 });

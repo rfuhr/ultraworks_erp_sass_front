@@ -44,6 +44,38 @@ export const Default: Story = {
     user: { name: 'Ana Souza', role: 'Administradora', initials: 'AS' },
     unreadCount: 3,
     title: 'Dashboard',
+    notifications: [
+      {
+        id: 'report',
+        title: 'Relatório mensal aprovado',
+        description: 'O relatório de outubro foi aprovado pelo financeiro.',
+        time: 'há 2 horas',
+        icon: 'check_circle',
+        read: false,
+      },
+      {
+        id: 'sync',
+        title: 'Integração atualizada',
+        description: 'A sincronização automática foi concluída com sucesso.',
+        time: 'ontem',
+        icon: 'sync',
+        read: true,
+      },
+    ],
+    notificationLabels: {
+      title: 'Notificações',
+      empty: 'Nenhuma notificação',
+      loading: 'Carregando notificações…',
+      error: 'Não foi possível carregar as notificações.',
+      retry: 'Tentar novamente',
+      showAll: 'Ver todas as notificações',
+    },
+    profileItems: [
+      { id: 'profile', label: 'Meu perfil', icon: 'person' },
+      { id: 'settings', label: 'Configurações da conta', icon: 'settings' },
+      { id: 'separator', label: '', separator: true },
+      { id: 'logout', label: 'Sair', icon: 'logout', danger: true },
+    ],
   },
 };
 

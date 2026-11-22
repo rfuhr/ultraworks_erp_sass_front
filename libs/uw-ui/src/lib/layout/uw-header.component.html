@@ -19,7 +19,10 @@
     <button
       type="button"
       class="uw-header__icon-button"
+      aria-haspopup="dialog"
+      data-testid="header-notifications-trigger"
       [attr.aria-label]="unreadCount() > 0 ? unreadCount() + ' notificações não lidas' : 'Notificações'"
+      [uwPopoverTriggerFor]="notificationsPanel"
       (click)="notificationsClick.emit()"
     >
       <uw-icon name="notifications" />
@@ -28,8 +31,74 @@
       }
     </button>
 
+    <uw-popover #notificationsPanel="uwPopover">
+      @if (notificationLabels(); as labels) {
+        <div class="uw-header__panel" role="dialog" data-testid="notifications-panel" [attr.aria-label]="labels.title">
+          <div class="uw-header__panel-head">
+            <strong>{{ labels.title }}</strong>
+            @if (unreadCount() > 0) {
+              <span class="uw-header__panel-count">{{ unreadCount() }}</span>
+            }
+          </div>
+
+          @if (notificationsLoading()) {
+            <p class="uw-header__panel-state" role="status">{{ labels.loading }}</p>
+          } @else if (notificationsError()) {
+            <div class="uw-header__panel-state uw-header__panel-state--error" role="alert">
+              <p>{{ labels.error }}</p>
+              <button type="button" class="uw-header__panel-retry" (click)="notificationsRetry.emit()">
+                {{ labels.retry }}
+              </button>
+            </div>
+          } @else if (notifications().length === 0) {
+            <p class="uw-header__panel-state">{{ labels.empty }}</p>
+          } @else {
+            <ul class="uw-header__notifications">
+              @for (item of notifications(); track item.id) {
+                <li>
+                  <button
+                    type="button"
+                    class="uw-header__notification"
+                    [class.uw-header__notification--read]="item.read"
+                    (click)="onNotificationClick(item)"
+                  >
+                    <span class="uw-header__notification-icon" aria-hidden="true">
+                      <uw-icon [name]="item.icon ?? 'notifications'" size="sm" />
+                    </span>
+                    <span class="uw-header__notification-body">
+                      <strong>{{ item.title }}</strong>
+                      @if (item.description) {
+                        <small>{{ item.description }}</small>
+                      }
+                      @if (item.time) {
+                        <time>{{ item.time }}</time>
+                      }
+                    </span>
+                    @if (!item.read) {
+                      <span class="uw-header__unread-dot" aria-label="Não lida"></span>
+                    }
+                  </button>
+                </li>
+              }
+            </ul>
+            <button type="button" class="uw-header__panel-footer" (click)="onShowAllNotifications()">
+              {{ labels.showAll }}
+              <uw-icon name="arrow_forward" size="sm" />
+            </button>
+          }
+        </div>
+      }
+    </uw-popover>
+
     @if (user(); as currentUser) {
-      <button type="button" class="uw-header__profile" (click)="profileClick.emit()">
+      <button
+        type="button"
+        class="uw-header__profile"
+        aria-haspopup="menu"
+        data-testid="header-profile-trigger"
+        [uwPopoverTriggerFor]="profilePanel"
+        (click)="profileClick.emit()"
+      >
         <uw-avatar [initials]="currentUser.initials ?? currentUser.name.slice(0, 2)" size="sm" />
         <span class="uw-header__user">
           <strong>{{ currentUser.name }}</strong>
@@ -37,7 +106,33 @@
             <small>{{ currentUser.role }}</small>
           }
         </span>
+        <uw-icon name="expand_more" size="sm" class="uw-header__profile-chevron" />
       </button>
+
+      <uw-popover #profilePanel="uwPopover">
+        @if (profileItems().length) {
+          <div class="uw-header__profile-panel" role="menu" data-testid="profile-panel">
+            @for (item of profileItems(); track item.id) {
+              @if (item.separator) {
+                <div class="uw-header__profile-sep" role="separator"></div>
+              } @else {
+                <button
+                  type="button"
+                  role="menuitem"
+                  class="uw-header__profile-item"
+                  [class.uw-header__profile-item--danger]="item.danger"
+                  (click)="onProfileItemClick(item)"
+                >
+                  @if (item.icon) {
+                    <uw-icon [name]="item.icon" size="sm" />
+                  }
+                  <span>{{ item.label }}</span>
+                </button>
+              }
+            }
+          </div>
+        }
+      </uw-popover>
     }
   </div>
 </header>

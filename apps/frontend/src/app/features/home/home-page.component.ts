@@ -1,35 +1,73 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { I18nService } from '@app/i18n';
-import { UwLanguageSwitcherComponent } from '@app/uw-ui';
-import { TranslatePipe } from '@ngx-translate/core';
-import { HomeDemoService } from './home-demo.service';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import {
+  ToastService,
+  UwAlertComponent,
+  UwButtonComponent,
+  UwCardComponent,
+  UwCardHeaderDirective,
+  UwEmptyStateComponent,
+  UwPageHeaderComponent,
+  UwProgressBarComponent,
+  UwSkeletonComponent,
+  UwStatCardComponent,
+  UwTimelineComponent,
+  UwTimelineItemComponent,
+} from '@app/uw-ui';
+import { HomeDashboardService } from './home-dashboard.service';
+
+type LoadMode = 'success' | 'empty' | 'error';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [RouterLink, TranslatePipe, UwLanguageSwitcherComponent],
+  imports: [
+    TranslatePipe,
+    UwAlertComponent,
+    UwButtonComponent,
+    UwCardComponent,
+    UwCardHeaderDirective,
+    UwEmptyStateComponent,
+    UwPageHeaderComponent,
+    UwProgressBarComponent,
+    UwSkeletonComponent,
+    UwStatCardComponent,
+    UwTimelineComponent,
+    UwTimelineItemComponent,
+  ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
-  providers: [HomeDemoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent implements OnInit {
-  private readonly demo = inject(HomeDemoService);
-  readonly i18n = inject(I18nService);
+  private readonly dashboard = inject(HomeDashboardService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
-  readonly state = this.demo.state;
-  readonly items = this.demo.items;
+  readonly state = this.dashboard.state;
+  readonly metrics = this.dashboard.metrics;
+  readonly activities = this.dashboard.activities;
+  readonly progress = this.dashboard.progress;
+  readonly loading = computed(() => this.state() === 'loading');
+  readonly skeletonItems = [1, 2, 3, 4] as const;
 
   ngOnInit(): void {
-    this.demo.load('success');
+    const requested = this.route.snapshot.queryParamMap.get('state');
+    const mode: LoadMode = requested === 'empty' || requested === 'error' ? requested : 'success';
+    this.dashboard.load(mode);
   }
 
-  load(mode: 'success' | 'empty' | 'error'): void {
-    this.demo.load(mode);
+  load(mode: LoadMode): void {
+    this.dashboard.load(mode);
   }
 
-  changeLanguage(language: string): void {
-    this.i18n.use(language);
+  retry(): void {
+    this.dashboard.retry();
+  }
+
+  onDemoAction(): void {
+    this.toast.show(this.translate.instant('home.demo.action'), 'info');
   }
 }
