@@ -1,0 +1,66 @@
+@import './palette.css';
+
+:root {
+  /* ===================================================
+     COLOR TOKENS — Semantic aliases for palette values
+     Use:  var(--color-{role})
+     =================================================== */
+
+  /* --- Brand / Primary --- */
+  --color-primary:              var(--color-violet-600);
+  --color-on-primary:           #ffffff;
+  --color-primary-container:    var(--color-violet-100);
+  --color-on-primary-container: var(--color-violet-950);
+
+  /* --- Secondary --- */
+  --color-secondary:                var(--color-teal-600);
+  --color-on-secondary:             #ffffff;
+  --color-secondary-container:      var(--color-teal-50);
+  --color-on-secondary-container:   var(--color-teal-900);
+
+  /* --- Tertiary / Accent --- */
+  --color-tertiary:             var(--color-rose-600);
+  --color-on-tertiary:          #ffffff;
+  --color-tertiary-container:   var(--color-rose-100);
+
+  /* --- Surfaces --- */
+  --color-surface:              var(--color-neutral-50);
+  --color-surface-dim:          var(--color-neutral-200);
+  --color-surface-bright:       #ffffff;
+  --color-surface-container:    var(--color-neutral-100);
+  --color-surface-container-low: var(--color-neutral-50);
+  --color-surface-container-high: var(--color-neutral-200);
+
+  /* --- Surface tint (inputs, selects, search) --- */
+  --color-surface-tint:         #f9f8ff;
+
+  /* --- On Surface (text) --- */
+  --color-on-surface:           var(--color-neutral-900);
+  --color-on-surface-variant:   var(--color-neutral-600);
+
+  /* --- Outline / Border --- */
+  --color-outline:              var(--color-neutral-400);
+  --color-outline-variant:      var(--color-neutral-200);
+
+  /* --- Status --- */
+  --color-success:              var(--color-emerald-500);
+  --color-on-success:           #ffffff;
+  --color-success-container:    var(--color-emerald-50);
+  --color-warning:              var(--color-amber-500);
+  --color-on-warning:           #ffffff;
+  --color-warning-container:    var(--color-amber-50);
+  --color-error:                var(--color-red-600);
+  --color-on-error:             #ffffff;
+  --color-error-container:      var(--color-red-50);
+  --color-info:                 var(--color-sky-500);
+  --color-info-container:       var(--color-sky-50);
+
+  /* --- Charts / Data Viz --- */
+  --color-chart-1: var(--color-violet-600);
+  --color-chart-2: var(--color-violet-400);
+  --color-chart-3: var(--color-rose-500);
+  --color-chart-4: var(--color-emerald-500);
+  --color-chart-5: var(--color-amber-500);
+  --color-chart-6: var(--color-sky-500);
+  --color-chart-7: var(--color-indigo-500);
+}

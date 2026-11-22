@@ -1,0 +1,11 @@
+:root {
+  /* ===================================================
+     TYPOGRAPHY TOKENS
+     Use:  var(--font-{family|size|weight}-{role})
+     =================================================== */
+
+  /* --- Font families --- */
+  --font-family-display: 'Plus Jakarta Sans', sans-serif;
+  --font-family-body:    'Inter', sans-serif;
+  --font-family-mono:    'JetBrains Mono', monospace;
+}

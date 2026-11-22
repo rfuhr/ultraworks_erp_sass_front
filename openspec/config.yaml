@@ -1,0 +1,109 @@
+schema: intent-driven
+
+context: |
+  Language: Portuguese (pt-BR)
+  All artifacts must be written in Brazilian Portuguese.
+
+  Frontend-only project. No monorepo. No backend.
+
+  Stack:
+    - Angular 21+ with standalone components and signals
+    - TypeScript 5.9+ strict, zero any
+    - Tailwind CSS 4
+    - uw-ui component library (prefix uw-)
+    - Material Symbols
+    - @ngx-translate/core (pt-BR default, en/es optional)
+    - @swimlane/ngx-charts
+    - Jest + jest-preset-angular
+    - Playwright
+    - Storybook
+    - ESLint + Prettier
+    - Docker + nginx
+
+  Architecture:
+    - Feature-first structure: config, core, data, features, layout, shared/uw-ui
+    - Standalone components, no feature NgModules
+    - Signals for local state; RxJS only for async streams
+    - Container vs presentational; OnPush on presentational
+    - Repository + stateful service with signals
+    - Lazy-loaded routes
+    - No third-party UI libraries
+
+  Design system:
+    - Source of truth: docs/design-system.md and docs/design-tokens/
+    - Two-layer tokens: palette -> semantic
+    - Sidebar 240px, fluid content, 12-column grid, 8px rhythm
+    - No glassmorphism, dramatic shadows or hardcoded colors
+    - Every uw-ui component has a Storybook story
+
+  Auth and tenancy:
+    - Login with tenant + email + password
+    - Access token in memory; refresh token in HttpOnly cookie (target contract)
+    - Guards: auth, tenant, permission/role
+    - Headers: X-Tenant-Id, X-Empresa-Id, X-Empresa-Filial-Id
+    - Never store refresh token in localStorage
+
+  API:
+    - /api/v1, environment.apiUrl
+    - RFC 7807 errors
+    - Repositories per feature, interceptors for auth/context/error
+    - Pagination, filters and sorting explicit
+
+  Quality:
+    - WCAG 2.1 AA
+    - i18n on every visible string
+    - Jest + Playwright + Storybook
+    - Coverage: 80% core/data, 70% features, 100% shared pipes/directives
+
+rules:
+  proposal:
+    - Must use grill-me skill
+    - Include a "Non-goals" section
+    - Identify affected screens, routes and components
+    - Reference the backend endpoints used (if any)
+    - Reference the design system and existing uw-ui components
+    - State whether the change affects auth, tenancy, i18n or accessibility
+
+  specs:
+    - Must use gherkin-authoring skill
+    - Every requirement must have at least one scenario
+    - Use GIVEN/WHEN/THEN in every scenario
+    - Include loading, empty, error and success states
+    - Include responsive behavior
+    - Include accessibility scenarios (keyboard, focus, aria)
+    - Include i18n scenarios when user-facing strings are added
+    - Reference existing uw-ui components before proposing new ones
+
+  design:
+    - Must use c4-diagrams skill
+    - Must reference a prototype in docs/design/prototypes/<screen>/
+    - Map visual elements to docs/design-system.md
+    - List uw-ui components used (no third-party UI)
+    - Include sequence diagram for cross-layer flows
+    - Include responsive and accessibility notes
+    - Include error/empty/loading states
+
+  adr:
+    - Must use architectural-decision-records skill
+    - One ADR per significant decision
+    - ADR must contain Context, Decision, Consequences, Alternatives considered
+    - ADRs are immutable once accepted; supersede with a new ADR
+
+  tasks:
+    - Break into tasks of at most 2 hours
+    - Order frontend tasks: types -> repository -> service -> component -> tests -> e2e
+    - Include unit tests for services, repositories and guards
+    - Include component tests for containers
+    - Include Playwright E2E for critical flows
+    - Include Storybook story for new/changed uw-ui components
+    - Include accessibility review task
+    - Include i18n task when strings are added
+
+apply:
+  requires:
+    - tasks
+  tracks: tasks.md
+  instruction: |
+    Read context files, work through pending tasks, mark complete as you go.
+    Pause if you hit blockers or need clarification.
+    Never skip tests, accessibility or i18n tasks.

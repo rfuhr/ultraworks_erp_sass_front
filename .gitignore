@@ -1,0 +1,30 @@
+# Node
+node_modules/
+dist/
+.angular/
+coverage/
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Ambiente e segredos
+.env
+.env.*
+!.env.example
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Playwright / Storybook
+playwright-report/
+test-results/
+storybook-static/
